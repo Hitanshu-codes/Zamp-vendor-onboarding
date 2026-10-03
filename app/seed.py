@@ -4,10 +4,9 @@ Each table is only filled when it is empty, so running seed() twice changes noth
 """
 from __future__ import annotations
 
-import regex
-
 from app import audit, clock, db
 from app.domain.banking import normalize_account
+from app.domain.identifiers import normalize_identifier
 from app.domain.names import normalize_name
 from app.domain.taxids import make_gstin
 
@@ -20,7 +19,7 @@ VENDORS: list[tuple[str, str, str, str, str, str, str, str]] = [
     ("Meridian Office Supplies Private Limited", "IN", make_gstin("07", "AAGCM5567Q"), "915020033344455", "UTIB0000123", "active", "meridian-office.example", "+91 11 4000 1105"),
     ("Coastal Packaging Private Limited", "IN", make_gstin("32", "AAHCC3390L"), "10023456789", "SBIN0070011", "active", "coastalpack.example", "+91 484 400 1106"),
     ("Harbor & Main Consulting GmbH", "DE", "DE812345678", "DE44500105175407324931", "INGDDEFFXXX", "active", "harbormain.example", "+49 30 4000 1107"),
-    ("Lindqvist Instruments GmbH", "DE", "DE298765431", "DE21500105170648489890", "COBADEFFXXX", "active", "lindqvist-instruments.example", "+49 89 4000 1108"),
+    ("Lindqvist Instruments GmbH", "DE", "DE298765431", "DE89370400440532013000", "COBADEFFXXX", "active", "lindqvist-instruments.example", "+49 89 4000 1108"),
     ("Thamesbridge Facilities Ltd", "GB", "GB123456789", "GB33BUKB20201555555555", "BUKBGB22", "active", "thamesbridge.example", "+44 20 4000 1109"),
     ("Pennine Print Works Ltd", "GB", "GB987654312", "GB94BARC10201530093459", "BARCGB22", "active", "pennineprint.example", "+44 113 400 1110"),
     ("Orchid Lane Events Pte Ltd", "SG", "201912345K", "0123456789", "DBSSSGSG", "active", "orchidlane.example", "+65 6000 1111"),
@@ -127,17 +126,3 @@ def seed() -> dict[str, int]:
         audit.log("system", "seed", "database", None, inserted)
     return inserted
 
-
-def normalize_identifier(kind: str, value: str) -> str:
-    """Normalise a watchlist identifier so exact matching is format-insensitive."""
-    if kind in ("name", "director"):
-        return normalize_name(value)
-    if kind == "bank_account":
-        return normalize_account(value)
-    if kind == "tax_id":
-        return regex.sub(r"\s", "", value.upper())
-    if kind == "email_domain":
-        return value.strip().lower().lstrip("@")
-    if kind == "phone":
-        return regex.sub(r"[^\d]", "", value)
-    return " ".join(regex.sub(r"[^\p{L}\p{N}\s]", " ", value.lower()).split())
