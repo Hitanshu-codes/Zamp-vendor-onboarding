@@ -2,8 +2,11 @@
 {% block title %}Watchlist{% endblock %}
 {% block content %}
 <div class="page-head">
-  <div><h1>Internal watchlist</h1><p>Previously flagged vendors. New submissions are matched on every identifier, not just the name.</p></div>
+  <div><h1>Internal watchlist</h1><p>Previously flagged vendors. New submissions are matched on every identifier (bank account, tax ID, email domain, phone, address, directors), not just the name. Vendors are never told which entry matched.</p></div>
 </div>
+
+{% if error %}<div class="notice bad" role="alert">{{ error }}</div>{% endif %}
+{% if done %}<div class="notice ok" role="status">{{ done }}.</div>{% endif %}
 
 {% macro sev_badge(s) -%}
   {%- if s == "blocked" -%}<span class="badge b-bad"><span class="i" aria-hidden="true">⛔</span>Blocked</span>
@@ -15,22 +18,64 @@
   {% if entries %}
   <div class="table-wrap">
     <table class="data">
-      <thead><tr><th>Entry</th><th>Severity</th><th>Identifiers</th><th>Reason</th><th>Added</th></tr></thead>
+      <thead><tr><th>Entry</th><th>Severity</th><th>Identifiers</th><th>Matches</th><th>Source / expiry</th><th></th></tr></thead>
       <tbody>
-      {% for e in entries %}
-        <tr>
-          <td><strong>{{ e.label }}</strong>{% if not e.active %} <span class="badge b-neutral">inactive</span>{% endif %}</td>
+      {% for e in entries %}{% set expired = e.expires_at and e.expires_at[:10] < today %}
+        <tr class="{{ 'inactive' if not e.active or expired }}">
+          <td><strong>#{{ e.id }} {{ e.label }}</strong>{% if not e.active %} <span class="badge b-neutral">inactive</span>{% elif expired %} <span class="badge b-neutral">expired</span>{% endif %}
+            <div class="small muted">{{ e.reason }}</div></td>
           <td>{{ sev_badge(e.severity) }}</td>
-          <td><div class="chips">{% for i in idents.get(e.id, []) %}<span class="chip" title="{{ i.kind }}">{{ i.kind|replace('_', ' ') }}: {{ i.value_display }}</span>{% endfor %}</div></td>
-          <td class="small">{{ e.reason }}</td>
-          <td class="small">{{ e.added_by }}<br><span class="muted">{{ e.added_at[:10] }}</span></td>
+          <td><div class="chips">{% for i in idents.get(e.id, []) %}<span class="chip"><span class="muted">{{ i.kind|replace('_', ' ') }}:</span> {{ i.value_display }}</span>{% endfor %}</div></td>
+          <td class="small">{% set ms = matches.get(e.id, []) %}
+            {% if ms %}{{ ms|length }} match{{ 'es' if ms|length != 1 }}
+              <ul class="compact">{% for m in ms[:3] %}<li><a href="/submissions/{{ m.submission_id }}">#{{ m.submission_id }} {{ m.vendor_name }}</a> · {{ m.matched_kind|replace('_', ' ') }} ({{ m.match_type }}){% if m.cleared_by %} · <span class="text-ok">cleared by {{ m.cleared_by }}</span>{% endif %}</li>{% endfor %}</ul>
+            {% else %}<span class="muted">none</span>{% endif %}</td>
+          <td class="small">{{ e.added_by }}{% if e.source_submission_id %} · <a href="/submissions/{{ e.source_submission_id }}">case source #{{ e.source_submission_id }}</a>{% endif %}<br>
+            <span class="muted">added {{ e.added_at[:10] }}{% if e.expires_at %} · expires {{ e.expires_at[:10] }}{% endif %}</span></td>
+          <td>
+            <form method="post" action="/watchlist/{{ e.id }}/active" class="inline-form">
+              <input type="hidden" name="active" value="{{ '0' if e.active else '1' }}">
+              <input type="text" name="reason" placeholder="Reason" required minlength="5" aria-label="Reason for {{ 'deactivating' if e.active else 'reactivating' }} entry {{ e.id }}">
+              <button class="btn" type="submit">{{ "Deactivate" if e.active else "Reactivate" }}</button>
+            </form>
+          </td>
         </tr>
       {% endfor %}
       </tbody>
     </table>
   </div>
   {% else %}
-  <div class="empty"><h2>Watchlist is empty</h2><p>Entries can be added from any review case.</p></div>
+  <div class="empty"><h2>Watchlist is empty</h2><p>Add an entry below, import a CSV, or add one from any review case.</p></div>
   {% endif %}
 </div>
+
+<div class="grid-2">
+  <form class="card" method="post" action="/watchlist/add">
+    <h2>Add an entry</h2>
+    <div class="field"><label for="w-label">Label</label><input id="w-label" name="label" type="text" required placeholder="e.g. Acme Traders (duplicate invoicing)"></div>
+    <div class="row">
+      <div class="field" style="flex:1"><label for="w-sev">Severity</label><select id="w-sev" name="severity"><option value="watch">Watch: risk points only</option><option value="high">High: manual review</option><option value="blocked">Blocked: reject</option></select></div>
+      <div class="field" style="flex:1"><label for="w-exp">Expires <span class="muted">(optional)</span></label><input id="w-exp" name="expires_at" type="date"></div>
+    </div>
+    <fieldset class="checks-fieldset"><legend class="small"><strong>Identifiers</strong> (fill any)</legend>
+      {% for n in range(4) %}
+      <div class="row ident-row">
+        <select name="kind" aria-label="Identifier kind {{ n + 1 }}">{% for k in kinds %}<option value="{{ k }}" {% if (n == 0 and k == 'name') or (n == 1 and k == 'bank_account') or (n == 2 and k == 'tax_id') or (n == 3 and k == 'email_domain') %}selected{% endif %}>{{ k|replace('_', ' ') }}</option>{% endfor %}</select>
+        <input type="text" name="value" aria-label="Identifier value {{ n + 1 }}">
+      </div>
+      {% endfor %}
+    </fieldset>
+    <div class="field"><label for="w-reason">Reason</label><input id="w-reason" name="reason" type="text" required minlength="5"></div>
+    <button class="btn primary" type="submit">Add to watchlist</button>
+  </form>
+
+  <form class="card" method="post" action="/watchlist/import" enctype="multipart/form-data">
+    <h2>Import from CSV</h2>
+    <p class="hint">Columns: <code>label, severity, reason, kind, value, expires_at</code> (expires_at optional). Rows sharing a label become one entry with several identifiers. Kinds: {{ kinds|join(', ') }}.</p>
+    <label class="dropzone" for="w-csv"><input id="w-csv" name="csv" type="file" accept=".csv,text/csv" required>
+      <span class="dz-title">CSV file</span><span class="dz-file" data-empty="Drop a file here or click to choose">Drop a file here or click to choose</span></label>
+    <button class="btn" type="submit">Import</button>
+  </form>
+</div>
 {% endblock %}
+{% block scripts %}<script src="/static/submit.js" defer></script>{% endblock %}

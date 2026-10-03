@@ -4,7 +4,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import RedirectResponse
 
-from app import audit, clock, db, demo, scheduler, settings_store, tax_registry
+from app import audit, clock, db, demo, scheduler, settings_store, tax_registry, watchlist_admin
 from app.config import config
 from app.security.auth import COOKIE, SESSION_MAX_AGE, auth_enabled, make_cookie, password_ok
 from app.web.render import page, templates
@@ -48,12 +48,6 @@ def logout():
 
 # --- main sections (filled in by later phases) ---------------------------------
 
-@router.get("/dashboard")
-def dashboard(request: Request):
-    return page(request, "placeholder.html", "dashboard", title="Dashboard",
-                empty_title="No submissions yet", empty_body="Run a submission from the Submit page and it will appear here.")
-
-
 @router.get("/rules")
 def rules(request: Request, error: str = "", done: str = ""):
     rows = db.query("SELECT * FROM tax_rules ORDER BY country, tax_type, id")
@@ -94,13 +88,60 @@ async def rule_action(rule_id: int, action: str, request: Request):
 
 
 @router.get("/watchlist")
-def watchlist(request: Request):
-    entries = db.query("SELECT * FROM watchlist ORDER BY CASE severity WHEN 'blocked' THEN 0 WHEN 'high' THEN 1 ELSE 2 END, id")
-    idents = db.query("SELECT * FROM watchlist_identifiers ORDER BY id")
+def watchlist(request: Request, error: str = "", done: str = ""):
+    entries = db.query("SELECT * FROM watchlist ORDER BY active DESC, CASE severity WHEN 'blocked' THEN 0 WHEN 'high' THEN 1 ELSE 2 END, id")
     by_entry: dict[int, list] = {}
-    for i in idents:
+    for i in db.query("SELECT * FROM watchlist_identifiers ORDER BY id"):
         by_entry.setdefault(i["watchlist_id"], []).append(i)
-    return page(request, "watchlist.html", "watchlist", entries=entries, idents=by_entry)
+    matches: dict[int, list] = {}
+    for m in db.query("SELECT m.*, r.submission_id, s.vendor_name FROM watchlist_matches m JOIN runs r ON r.id = m.run_id"
+                      " JOIN submissions s ON s.id = r.submission_id ORDER BY m.id DESC"):
+        matches.setdefault(m["watchlist_id"], []).append(m)
+    today = clock.today().isoformat()
+    return page(request, "watchlist.html", "watchlist", entries=entries, idents=by_entry, matches=matches, error=error, done=done,
+                kinds=watchlist_admin.KINDS, today=today)
+
+
+def _back(error: str | None = None, done: str | None = None):
+    from urllib.parse import quote
+    return RedirectResponse(f"/watchlist?{'error=' + quote(error) if error else 'done=' + quote(done or 'saved')}", status_code=303)
+
+
+@router.post("/watchlist/add")
+async def watchlist_add(request: Request):
+    f = await request.form()
+    idents = [(str(k), str(v)) for k, v in zip(f.getlist("kind"), f.getlist("value"))]
+    try:
+        watchlist_admin.add_entry(str(f.get("label", "")), str(f.get("severity", "")), str(f.get("reason", "")), idents,
+                                  str(f.get("expires_at", "")) or None, _reviewer_actor())
+    except watchlist_admin.WatchlistError as exc:
+        return _back(error=str(exc))
+    return _back(done="Entry added")
+
+
+@router.post("/watchlist/{entry_id}/active")
+async def watchlist_toggle(request: Request, entry_id: int):
+    f = await request.form()
+    try:
+        watchlist_admin.set_active(entry_id, f.get("active") == "1", str(f.get("reason", "")), _reviewer_actor())
+    except watchlist_admin.WatchlistError as exc:
+        return _back(error=str(exc))
+    return _back(done="Entry updated")
+
+
+@router.post("/watchlist/import")
+async def watchlist_import(request: Request):
+    f = await request.form()
+    upload = f.get("csv")
+    if upload is None or not hasattr(upload, "read"):
+        return _back(error="Choose a CSV file.")
+    raw = (await upload.read(512_000)).decode("utf-8-sig", errors="replace")
+    try:
+        created, errors = watchlist_admin.import_csv(raw, _reviewer_actor())
+    except watchlist_admin.WatchlistError as exc:
+        return _back(error=str(exc))
+    msg = f"Imported {created} entr{'y' if created == 1 else 'ies'}" + (f"; {len(errors)} problem(s): " + " | ".join(errors[:3]) if errors else "")
+    return _back(done=msg) if created or not errors else _back(error=msg)
 
 
 # --- settings ---------------------------------------------------------------

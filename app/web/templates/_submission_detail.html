@@ -1,0 +1,107 @@
+{# Submission detail: used inside the dashboard drawer and on /submissions/<id>. All values autoescaped. #}
+<div class="detail" data-detail>
+  <div class="detail-head">
+    <p class="eyebrow">Submission #{{ sub.id }} · v{{ sub.current_version }} · {{ form.country }}</p>
+    <h2 class="detail-title">{{ form.legal_name or "Unnamed vendor" }}</h2>
+    <div class="row" style="gap:8px">
+      {% set b = buckets[bucket] %}<span class="badge {{ {'s-ok':'b-ok','s-warn':'b-warn','s-review':'b-review','s-bad':'b-bad'}[b[1]] }}">{{ b[0] }}</span>
+      <span class="chip">risk {{ sub.risk_points }}</span>
+      {% if last_run %}<a class="small" href="/runs/{{ last_run.id }}">Open live run view</a>{% endif %}
+      {% for c in cases if c.state == "open" %}<a class="small" href="/review/{{ c.id }}">Review case #{{ c.id }}</a>{% endfor %}
+      <a class="small" href="/submissions/{{ sub.id }}/export.json" download>Export JSON</a>
+    </div>
+  </div>
+
+  <div class="tabs" role="tablist" aria-label="Submission detail">
+    {% for key, label in [("reasoning", "Reasoning"), ("fields", "Fields"), ("documents", "Documents"), ("emails", "Emails (" ~ emails|length ~ ")"), ("versions", "Versions (" ~ versions|length ~ ")"), ("audit", "Audit trail")] %}
+    <button role="tab" type="button" id="tab-{{ key }}" aria-controls="panel-{{ key }}" aria-selected="{{ 'true' if loop.first else 'false' }}" tabindex="{{ 0 if loop.first else -1 }}">{{ label }}</button>
+    {% endfor %}
+  </div>
+
+  <section role="tabpanel" id="panel-reasoning" aria-labelledby="tab-reasoning">
+    {% if decisions %}
+    <h3>Decisions</h3>
+    <ol class="timeline">
+      {% for d in decisions|reverse %}
+      <li><strong>{{ d.status }}</strong> / {{ d.route|replace('_', ' ') }} by {{ d.decided_by }} <span class="muted small">{{ d.ts[:16]|replace('T', ' ') }}</span>
+        <div class="small">{{ d.rationale_text }}</div></li>
+      {% endfor %}
+    </ol>
+    {% endif %}
+    <h3>Checks in the latest run{% if last_run %} (#{{ last_run.id }}, {{ last_run.trigger|replace('_', ' ') }}){% endif %}</h3>
+    <table class="data compact-table">
+      <thead><tr><th>Result</th><th>Check</th><th>Explanation</th></tr></thead>
+      <tbody>
+      {% for c in checks %}
+        <tr class="res-{{ c.result }}">
+          <td><span class="badge {{ {'pass':'b-ok','fail':'b-bad','warn':'b-warn','skipped':'b-neutral'}[c.result] }}">{{ {'pass':'✓','fail':'✕','warn':'!','skipped':'–'}[c.result] }} {{ c.result }}</span>
+            {% if c.reason_code %}<div class="mono small">{{ c.reason_code }}</div>{% endif %}{% if c.reused_from_run_id %}<div class="small muted">reused from v{{ c.reused_from_run_id }}</div>{% endif %}</td>
+          <td class="mono small">{{ c.check_name }}</td>
+          <td class="small">{{ c.explanation }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <section role="tabpanel" id="panel-fields" aria-labelledby="tab-fields" hidden>
+    <p class="hint">Form values next to what was read from each document (current version). Rows that differ are highlighted.</p>
+    <div class="table-wrap">
+    <table class="data compact-table evidence-grid">
+      <thead><tr><th>Field</th><th>Form</th>{% for slot, label in slots %}<th>{{ label|capitalize }}</th>{% endfor %}</tr></thead>
+      <tbody>{% for row in grid %}<tr class="{{ 'mismatch' if row.mismatch }}"><td><strong>{{ row.label }}</strong>{% if row.mismatch %} <span class="badge b-warn">≠</span>{% endif %}</td><td>{{ row.form }}</td>{% for slot, _ in slots %}<td>{{ row.cells[slot] }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+    </table>
+    </div>
+    <h3>All form fields</h3>
+    <dl class="kv small">{% for k, v in form.items() %}<dt>{{ labels.get(k, k) }}</dt><dd>{{ v or "—" }}</dd>{% endfor %}</dl>
+  </section>
+
+  <section role="tabpanel" id="panel-documents" aria-labelledby="tab-documents" hidden>
+    <div class="doc-cards">
+    {% for slot, label in slots %}{% set d = current_docs.get(slot) %}
+      <div class="doc-card">
+        <h3>{{ label|capitalize }}</h3>
+        {% if d %}
+          <a href="/documents/{{ d.id }}/page/1.png" target="_blank" rel="noopener"><img src="/documents/{{ d.id }}/page/1.png" alt="Page 1 of the {{ label }}" loading="lazy"></a>
+          <dl class="kv small"><dt>File</dt><dd>{{ d.filename }}</dd><dt>Read as</dt><dd>{{ (d.classified_type or "not classified")|replace('_', ' ') }}</dd>
+            <dt>Quality</dt><dd>{{ d.extraction_quality or "—" }}</dd><dt>SHA-256</dt><dd class="mono">{{ d.sha256[:16] }}…</dd>
+            {% set hidden = loads(d.hidden_text_findings_json, []) %}{% if hidden %}<dt>Hidden text</dt><dd class="text-bad">{{ hidden|length }} span(s): {% for h in hidden[:2] %}"{{ h.text[:60] }}" ({{ h.reasons|join(', ') }}) {% endfor %}</dd>{% endif %}</dl>
+        {% else %}<p class="muted small">Not provided.</p>{% endif %}
+      </div>
+    {% endfor %}
+    </div>
+  </section>
+
+  <section role="tabpanel" id="panel-emails" aria-labelledby="tab-emails" hidden>
+    {% if emails %}
+    <table class="data compact-table"><thead><tr><th>Kind</th><th>Audience</th><th>Subject</th><th>Status</th><th></th></tr></thead>
+      <tbody>{% for e in emails %}<tr><td>{{ e.kind|replace('_', ' ') }}</td><td>{{ e.audience }}</td><td>{{ e.subject }}</td><td>{{ e.status|replace('_', ' ') }}{% if e.error %} <span class="text-bad small">({{ e.error[:60] }})</span>{% endif %}</td><td><a href="/emails/{{ e.id }}">View</a></td></tr>{% endfor %}</tbody></table>
+    {% else %}<p class="muted">No emails yet.</p>{% endif %}
+  </section>
+
+  <section role="tabpanel" id="panel-versions" aria-labelledby="tab-versions" hidden>
+    {% for v in versions|reverse %}{% set diff = loads(v.diff_from_previous_json, {}) %}
+      <div class="version">
+        <h3>Version {{ v.version_no }} <span class="muted small">{{ v.created_at[:16]|replace('T', ' ') }}</span></h3>
+        {% if v.version_no == 1 %}<p class="small muted">Initial submission.</p>
+        {% elif not diff.form and not diff.docs %}<p class="small muted">No changes.</p>
+        {% else %}
+          <table class="data compact-table diff"><thead><tr><th>Changed</th><th>Before</th><th>After</th></tr></thead><tbody>
+          {% for k, ch in (diff.form or {}).items() %}<tr><td>{{ labels.get(k, k) }}</td><td class="del">{{ ch.old or "—" }}</td><td class="ins">{{ ch.new or "—" }}</td></tr>{% endfor %}
+          {% for slot, ch in (diff.docs or {}).items() %}<tr><td>{{ slot|replace('_', ' ') }} (document)</td><td class="del">{{ ch.old or "—" }}</td><td class="ins">{{ ch.new }} (new file)</td></tr>{% endfor %}
+          </tbody></table>
+        {% endif %}
+        {% for r in runs if r.version_no == v.version_no %}<p class="small"><a href="/runs/{{ r.id }}">Run #{{ r.id }}</a> · {{ r.trigger|replace('_', ' ') }} · {{ r.outcome_status or "running" }}{% if r.outcome_route and r.outcome_route != 'none' %} / {{ r.outcome_route|replace('_', ' ') }}{% endif %}</p>{% endfor %}
+      </div>
+    {% endfor %}
+  </section>
+
+  <section role="tabpanel" id="panel-audit" aria-labelledby="tab-audit" hidden>
+    <ol class="timeline audit">
+      {% for a in audit %}
+      <li><span class="mono small muted">{{ a.ts[:19]|replace('T', ' ') }}</span> <strong>{{ a.action|replace('_', ' ') }}</strong> <span class="chip">{{ a.actor }}</span>
+        {% set det = loads(a.detail_json, {}) %}{% if det %}<div class="small muted mono audit-detail">{{ det|tojson }}</div>{% endif %}</li>
+      {% endfor %}
+    </ol>
+  </section>
+</div>

@@ -19,7 +19,7 @@ from typing import Any, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
-from app import audit, clock, db, settings_store
+from app import audit, clock, db, runctx, settings_store
 from app.config import ROOT, config
 
 RECORDINGS_DIR = ROOT / "recordings"
@@ -187,7 +187,7 @@ async def _invoke(task: str, model: str, system: str, parts: list[Part], schema_
 
 def _audit(info: CallInfo, parts: list[Part], outcome: str, output: str | None) -> None:
     audit.log("llm", f"llm_call:{info.task}", "llm", info.cache_key[:16], {
-        "model": info.model, "mode": info.mode, "source": info.source, "outcome": outcome,
+        "run_id": runctx.current_run_id.get(), "model": info.model, "mode": info.mode, "source": info.source, "outcome": outcome,
         "input_hashes": [hashlib.sha256(p.fingerprint().encode()).hexdigest()[:16] for p in parts],
         "output": (output or "")[:500], "latency_ms": info.latency_ms, "tokens": info.tokens,
     })

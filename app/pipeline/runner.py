@@ -4,7 +4,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 
-from app import audit, clock, db, events
+from app import audit, clock, db, events, runctx
 from app.config import config
 from app.models import CheckResult
 from app.pipeline import checks, forms
@@ -129,6 +129,7 @@ def _load_context(run_id: int) -> RunContext:
 
 
 async def execute(run_id: int) -> None:
+    runctx.current_run_id.set(run_id)
     ctx = _load_context(run_id)
     events.emit(run_id, "intake", "info", {"message": f"Run started ({ctx.trigger}, version {ctx.version_no}).", "stages": STAGE_INFO,
                                            "changed_inputs": sorted(ctx.changed) if ctx.changed is not None else None})

@@ -42,6 +42,12 @@ def is_suspicious(codes: list[str]) -> bool:
 
 
 def store(submission_id: int, run_id: int | None, kind: str, audience: str, to: str, subject: str, body: str, codes: list[str]) -> int:
+    email_id = _insert_email(submission_id, run_id, kind, audience, to, subject, body, codes)
+    audit.log("system", "email_prepared", "outbox_email", email_id, {"submission_id": submission_id, "kind": kind, "audience": audience})
+    return email_id
+
+
+def _insert_email(submission_id: int, run_id: int | None, kind: str, audience: str, to: str, subject: str, body: str, codes: list[str]) -> int:
     return db.execute(
         "INSERT INTO outbox_emails(submission_id, run_id, kind, audience, \"to\", subject, body, reason_codes_json, status, created_at)"
         " VALUES (?,?,?,?,?,?,?,?, 'draft', ?)",
@@ -166,5 +172,6 @@ def open_review_case(ctx, d, tasks: list[str] | None = None) -> int:
                            fixable_items=[i["text"] for i in fixable_items(list(ctx.results.values()), ctx.form.get("country", ""))],
                            case_url=f"{config.public_base_url}/review/{case_id}", run_url=f"{config.public_base_url}/runs/{ctx.run_id}")
     store(ctx.submission_id, ctx.run_id, "reviewer_brief", "internal", "review-queue", subject, body, codes)
+    audit.log("system", "review_case_opened", "review_case", case_id, {"submission_id": ctx.submission_id, "priority": priority, "codes": codes})
     events.emit(ctx.run_id, "route", "info", {"message": f"Review case #{case_id} opened with priority {priority}.", "case_id": case_id})
     return case_id

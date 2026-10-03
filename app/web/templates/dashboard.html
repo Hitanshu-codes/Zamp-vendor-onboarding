@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Dashboard</h1><p>Every submission, its outcome and why. Click a row for the full reasoning, documents, emails, versions and audit trail.</p></div>
+  <a class="btn primary" href="/submit">New submission</a>
+</div>
+
+{% macro status_badge(b) -%}
+  {%- if b == "approved" -%}<span class="badge b-ok"><span class="i" aria-hidden="true">✓</span>Approved</span>
+  {%- elif b == "rejected" -%}<span class="badge b-bad"><span class="i" aria-hidden="true">✕</span>Rejected</span>
+  {%- elif b == "manual_review" -%}<span class="badge b-review"><span class="i" aria-hidden="true">⚑</span>Manual review</span>
+  {%- else -%}<span class="badge b-warn"><span class="i" aria-hidden="true">✉</span>Waiting on vendor</span>{%- endif -%}
+{%- endmacro %}
+
+<section class="kpis" aria-label="Key figures">
+  <div class="kpi"><div class="kpi-label">Submissions</div><div class="kpi-value">{{ k.total }}</div></div>
+  <div class="kpi"><div class="kpi-label">Auto-decided</div><div class="kpi-value">{{ k.auto_pct }}%</div><div class="kpi-sub">no person needed</div></div>
+  <div class="kpi"><div class="kpi-label"><span class="dot s-ok" aria-hidden="true"></span>Approved</div><div class="kpi-value">{{ k.counts.approved }}</div></div>
+  <div class="kpi"><div class="kpi-label"><span class="dot s-warn" aria-hidden="true"></span>Waiting on vendor</div><div class="kpi-value">{{ k.counts.vendor_followup }}</div></div>
+  <div class="kpi"><div class="kpi-label"><span class="dot s-review" aria-hidden="true"></span>Manual review</div><div class="kpi-value">{{ k.counts.manual_review }}</div></div>
+  <div class="kpi"><div class="kpi-label"><span class="dot s-bad" aria-hidden="true"></span>Rejected</div><div class="kpi-value">{{ k.counts.rejected }}</div></div>
+  <div class="kpi"><div class="kpi-label">Median time to decision</div><div class="kpi-value kpi-small">{{ k.median_decision }}</div><div class="kpi-sub">to approve or reject</div></div>
+  <div class="kpi"><div class="kpi-label">Tax rule cache hits</div><div class="kpi-value kpi-small">{% if k.cache_hit_pct is none %}—{% else %}{{ k.cache_hit_pct }}%{% endif %}</div><div class="kpi-sub">{{ k.cache_lookups }} lookups</div></div>
+</section>
+
+<form class="card filters" method="get" action="/dashboard" role="search">
+  <div class="field"><label for="f-q">Search</label><input id="f-q" name="q" type="search" value="{{ filters.q }}" placeholder="Vendor name or #id"></div>
+  <div class="field"><label for="f-status">Status</label><select id="f-status" name="status"><option value="">All</option>
+    {% for key, label, _ in buckets %}<option value="{{ key }}" {% if filters.status == key %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+  <div class="field"><label for="f-country">Country</label><select id="f-country" name="country"><option value="">All</option>
+    {% for c in countries %}<option value="{{ c }}" {% if filters.country == c %}selected{% endif %}>{{ country_names.get(c, c) }}</option>{% endfor %}</select></div>
+  <div class="field"><label for="f-code">Reason code</label><select id="f-code" name="code"><option value="">All</option>
+    {% for c in all_codes %}<option value="{{ c }}" {% if filters.code == c %}selected{% endif %}>{{ c }}</option>{% endfor %}</select></div>
+  <div class="field"><label for="f-from">From</label><input id="f-from" name="date_from" type="date" value="{{ filters.date_from }}"></div>
+  <div class="field"><label for="f-to">To</label><input id="f-to" name="date_to" type="date" value="{{ filters.date_to }}"></div>
+  <div class="filter-actions"><button class="btn" type="submit">Apply</button>{% if filters.values()|select|list %}<a class="small" href="/dashboard">Clear</a>{% endif %}</div>
+</form>
+
+<div class="grid-2 charts">
+  <figure class="card chart" aria-labelledby="codes-title">
+    <h2 id="codes-title">Top reason codes</h2>
+    {% if top_codes %}
+    <ol class="hbars">
+      {% for t in top_codes %}
+      <li class="hbar" tabindex="0" data-tip="{{ t.code }}: {{ t.n }} submission{{ 's' if t.n != 1 }} · {{ t.severity }} · {{ t.meaning }}">
+        <span class="hbar-label mono">{{ t.code }}</span>
+        <span class="hbar-track"><span class="hbar-fill" style="width: {{ (100 * t.n / max_code)|round(1) }}%"></span></span>
+        <span class="hbar-value">{{ t.n }}</span>
+      </li>
+      {% endfor %}
+    </ol>
+    {% else %}<p class="muted">No reason codes yet. Approved submissions with no findings don't appear here.</p>{% endif %}
+  </figure>
+
+  <figure class="card chart" aria-labelledby="time-title">
+    <h2 id="time-title">Outcomes by submission day</h2>
+    {% if days %}
+    <div class="legend" aria-hidden="true">{% for key, label, cls in buckets %}<span><span class="dot {{ cls }}"></span>{{ label }}</span>{% endfor %}</div>
+    <div class="cols" role="img" aria-label="Stacked bars of outcomes per day; the same numbers are in the table below.">
+      {% for d in days %}
+      <div class="col" tabindex="0" data-tip="{{ d.day }} · {% for key, label, _ in buckets %}{{ label }} {{ d.counts[key] }}{{ ' · ' if not loop.last }}{% endfor %}">
+        <div class="col-stack" style="height: {{ (100 * d.total / max_day)|round(1) }}%">
+          {% for key, label, cls in buckets|reverse %}{% if d.counts[key] %}<span class="seg {{ cls }}" style="flex: {{ d.counts[key] }}"></span>{% endif %}{% endfor %}
+        </div>
+        <div class="col-label">{{ d.day[5:] }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    <details class="small"><summary>Show as table</summary>
+      <table class="data compact-table"><thead><tr><th>Day</th>{% for _, label, _ in buckets %}<th>{{ label }}</th>{% endfor %}</tr></thead>
+      <tbody>{% for d in days %}<tr><td>{{ d.day }}</td>{% for key, _, _ in buckets %}<td>{{ d.counts[key] }}</td>{% endfor %}</tr>{% endfor %}</tbody></table>
+    </details>
+    {% else %}<p class="muted">No submissions yet.</p>{% endif %}
+  </figure>
+</div>
+
+<div class="card flush">
+  {% if rows %}
+  <div class="table-wrap">
+    <table class="data clickable" id="subs-table">
+      <thead><tr><th>Vendor</th><th>Country</th><th>Status</th><th>Top reason codes</th><th>Risk</th><th>Version</th><th>Updated</th></tr></thead>
+      <tbody>
+      {% for s in rows %}
+        <tr data-sub="{{ s.id }}" tabindex="0">
+          <td><a href="/submissions/{{ s.id }}" class="row-link"><strong>{{ s.vendor_name or "Unnamed" }}</strong></a><div class="small muted">#{{ s.id }}{% if s.closed_reason %} · {{ s.closed_reason|replace('_', ' ') }}{% endif %}</div></td>
+          <td>{{ s.country }}</td>
+          <td>{{ status_badge(s.bucket) }}</td>
+          <td><div class="chips">{% for c in s.codes[:3] %}<span class="chip mono">{{ c }}</span>{% endfor %}{% if s.codes|length > 3 %}<span class="chip">+{{ s.codes|length - 3 }}</span>{% endif %}</div></td>
+          <td>{{ s.risk_points }}</td>
+          <td>v{{ s.current_version }}</td>
+          <td class="small">{{ s.updated_at[:16]|replace('T', ' ') }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty"><div class="icon" aria-hidden="true">○</div><h2>{% if filters.values()|select|list %}No submissions match these filters{% else %}No submissions yet{% endif %}</h2>
+    <p>{% if filters.values()|select|list %}<a href="/dashboard">Clear the filters</a>.{% else %}Run one from the <a href="/submit">Submit</a> page, or load a sample scenario.{% endif %}</p></div>
+  {% endif %}
+</div>
+
+<div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Submission detail" hidden>
+  <div class="drawer-bar"><button class="btn" type="button" id="drawer-close">Close</button><a class="btn" id="drawer-open-page" href="#">Open full page</a></div>
+  <div id="drawer-body"><p class="muted"><span class="spinner" aria-hidden="true"></span> Loading…</p></div>
+</aside>
+<div class="tip" id="tip" role="tooltip" hidden></div>
+{% endblock %}
+{% block scripts %}<script src="/static/dashboard.js" defer></script>{% endblock %}

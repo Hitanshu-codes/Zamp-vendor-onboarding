@@ -1,7 +1,7 @@
 """Stage 9: Decide. The pure decision engine turns check results into a status."""
 from __future__ import annotations
 
-from app import clock, db, events
+from app import audit, clock, db, events
 from app.config import config
 from app.decision.engine import decide
 from app.models import DecisionFlags
@@ -24,6 +24,8 @@ async def run(ctx: RunContext) -> None:
         (ctx.run_id, ctx.submission_id, clock.now_iso(), decision.status, decision.route,
          db.dumps([t.model_dump() for t in decision.triggered]), decision.risk_points, decision.rationale_text, "engine"),
     )
+    audit.log("system", "decision_made", "run", ctx.run_id, {"status": decision.status, "route": decision.route,
+                                                            "codes": decision.reason_codes, "risk_points": decision.risk_points})
     events.emit(ctx.run_id, "decide", "info", {
         "message": "Decision made by the rules engine (no LLM involved).",
         "decision": decision.model_dump(),
