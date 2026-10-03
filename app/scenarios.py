@@ -10,7 +10,8 @@ from app.config import ROOT
 from app.pipeline import runner
 
 SAMPLES = ROOT / "samples"
-ORDER = ["S0", "S1", "S2", "S3", "S4a", "S4b", "S4c", "S5a", "S5b", "S5c", "S5d", "S6a", "S6b", "S6c", "S6d", "S7a", "S7b"]
+ORDER = ["S0", "S1", "S2", "S3", "S4a", "S4b", "S4c", "S5a", "S5b", "S5c", "S5d", "S6a", "S6b", "S6c", "S6d", "S7a", "S7b",
+         "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16", "S17", "S18", "S19"]
 
 
 @dataclass
@@ -57,9 +58,13 @@ async def run(sid: str) -> ScenarioResult:
     await runner.execute(run_id)
     if meta.get("resubmission"):
         r = meta["resubmission"]
+        trigger = r.get("trigger", "resubmission")
         new_files = {slot: (f"{slot}.pdf", (SAMPLES / sid / f"{slot}_v2.pdf").read_bytes()) for slot in r["replace_docs"]}
+        if trigger == "bank_change":
+            vendor_id = db.query_one("SELECT vendor_id FROM submissions WHERE id = ?", (sub_id,))["vendor_id"]
+            db.execute("UPDATE vendors SET payment_hold = 1 WHERE id = ?", (vendor_id,))
         ver2, _ = runner.create_version(sub_id, r["form_changes"], new_files)
-        run_id = _run_now(sub_id, ver2, "resubmission")
+        run_id = _run_now(sub_id, ver2, trigger)
         await runner.execute(run_id)
     sub = db.query_one("SELECT * FROM submissions WHERE id = ?", (sub_id,))
     dec = db.query_one("SELECT * FROM decisions WHERE run_id = ?", (run_id,))

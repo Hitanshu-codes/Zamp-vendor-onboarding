@@ -237,3 +237,32 @@ dl.evidence dd { word-break: break-word; }
   .run-layout { grid-template-columns: 1fr; }
   .decision-panel { position: static; order: -1; }
 }
+
+/* --- review / portal ---------------------------------------------------------------- */
+.problem-list { display: flex; flex-direction: column; gap: 10px; }
+.problem { border-left: 3px solid var(--border-strong); padding: 4px 0 0 12px; }
+.problem p { margin: 4px 0 0; }
+.flagged { border-color: #f1b8b2; }
+.finding { margin-bottom: 10px; }
+.excerpt { margin: 4px 0 0; padding: 8px 10px; background: var(--bad-bg); color: #6b1a12; border-radius: var(--radius-sm); font-family: var(--mono); font-size: 12.5px; white-space: pre-wrap; word-break: break-word; }
+.inline-form { display: flex; gap: 6px; flex-wrap: wrap; }
+.inline-form input[type=text] { width: 260px; max-width: 100%; }
+.evidence-grid tr.mismatch td { background: #fffaeb; }
+.thumbs { display: flex; gap: 16px; padding: 16px 20px; flex-wrap: wrap; border-top: 1px solid var(--border); }
+.thumbs figure { margin: 0; width: 170px; }
+.thumbs img { width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff; }
+.thumbs figcaption { font-size: 12px; color: var(--text-3); margin-top: 4px; word-break: break-all; }
+.checks-fieldset { border: 0; padding: 0; margin: 0 0 12px; display: flex; flex-direction: column; gap: 8px; }
+.checks-fieldset .switch { font-weight: 400; align-items: flex-start; }
+.checks-fieldset .switch input { margin-top: 2px; flex: 0 0 auto; }
+.confirm { margin: 0 0 12px; color: var(--bad); }
+.timeline { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 10px; }
+.tasklist { margin: 0; padding-left: 4px; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.task-card { border-color: #f5c451; background: #fffcf2; }
+.compact { margin: 0; padding-left: 16px; font-size: 13px; }
+.portal-banner { background: var(--info-bg); color: var(--info); padding: 8px 14px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 13px; }
+.linklike { background: none; border: 0; padding: 0; color: var(--accent); font: inherit; cursor: pointer; text-decoration: underline; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.demo-helper { margin-top: 12px; padding: 10px; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); }
+.demo-helper select { width: auto; }

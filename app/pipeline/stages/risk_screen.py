@@ -29,30 +29,53 @@ def _collect(ctx: RunContext) -> dict[str, list[str]]:
         holders.append(ex.account_holder or "")
     uniq = lambda xs: list(dict.fromkeys(x for x in xs if x))  # noqa: E731
     return {"name": uniq(names), "bank_account": uniq(accounts), "tax_id": uniq(tax_ids), "address": uniq(addresses),
-            "director": uniq(directors), "holder": uniq(holders), "email_domain": uniq([email_domain(f.get("contact_email", ""))])}
+            "director": uniq(directors), "holder": uniq(holders), "email_domain": uniq([email_domain(f.get("contact_email", ""))]),
+            "phone": uniq([f.get("contact_phone", "")])}
+
+
+def cleared_entries(submission_id: int, kind: str) -> dict[int, dict]:
+    """Hits a reviewer already cleared for this submission (with a reason) are not raised again on re-runs."""
+    out: dict[int, dict] = {}
+    rows = db.query("SELECT a.* FROM review_actions a JOIN review_cases c ON c.id = a.case_id WHERE c.submission_id = ? AND a.action = 'clear_hit'",
+                    (submission_id,))
+    for r in rows:
+        p = db.loads(r["payload_json"], {})
+        if p.get("list") == kind and p.get("entry_id"):
+            out[int(p["entry_id"])] = {"cleared_by": r["reviewer"], "reason": r["reason_text"], "at": r["ts"]}
+    return out
 
 
 async def run(ctx: RunContext) -> None:
     c = _collect(ctx)
+    cleared_sanctions = cleared_entries(ctx.submission_id, "sanctions")
+    cleared_watch = cleared_entries(ctx.submission_id, "watchlist")
     vendor_id = db.query_one("SELECT vendor_id FROM submissions WHERE id = ?", (ctx.submission_id,))["vendor_id"]
 
     def sanctions_check():
         screened = [("legal or trade name", n) for n in c["name"]] + [("director", d) for d in c["director"]] + \
                    [("account holder", h) for h in c["holder"]]
         hits = sanctions.screen(screened, sanctions.load_entries(), config.sanctions_fuzzy_threshold)
-        out = sanctions.sanctions_outcome(hits)
+        # Only near matches can be cleared; an exact match is never suppressed.
+        kept = [h for h in hits if not (h.match_type == "fuzzy" and h.entry.id in cleared_sanctions)]
+        out = sanctions.sanctions_outcome(kept)
         out.evidence["names_screened"] = len(screened)
+        if len(kept) != len(hits):
+            out.evidence["previously_cleared"] = [cleared_sanctions[h.entry.id] | {"entry_id": h.entry.id} for h in hits if h not in kept]
         return out
 
     await ctx.check("sanctions", sanctions_check)
 
     def watchlist_check():
         candidate = {k: v for k, v in c.items() if k != "holder"}
-        hits = watchlist.screen(candidate, watchlist.load_entries(clock.today()), config.sanctions_fuzzy_threshold)
-        for h in hits:
+        all_hits = watchlist.screen(candidate, watchlist.load_entries(clock.today()), config.sanctions_fuzzy_threshold)
+        hits = [h for h in all_hits if h.entry.id not in cleared_watch]
+        for h in all_hits:
             db.execute("INSERT INTO watchlist_matches(run_id, watchlist_id, matched_kind, match_type, score) VALUES (?,?,?,?,?)",
                        (ctx.run_id, h.entry.id, h.kind, h.match_type, h.score))
-        return watchlist.watchlist_outcome(hits, ctx.form.get("legal_name", ""))
+        out = watchlist.watchlist_outcome(hits, ctx.form.get("legal_name", ""))
+        if len(hits) != len(all_hits):
+            out.evidence["previously_cleared"] = [cleared_watch[e] | {"entry_id": e} for e in {h.entry.id for h in all_hits} - {h.entry.id for h in hits}]
+        return out
 
     await ctx.check("watchlist", watchlist_check)
     vendors = vendor_master.load_vendors()

@@ -41,6 +41,7 @@ _SPECS: dict[str, CheckSpec] = {
     "form_complete": CheckSpec("Required form fields are filled in", "intake", ["form:*"]),
     "unrequested_change": CheckSpec("Resubmission only changed what we asked for", "intake", ["form:*", "doc:*"],
                                     required=lambda f: False, always_rerun=True),
+    "bank_change_request": CheckSpec("Bank change on an approved vendor", "intake", ["form:*"], required=lambda f: False, always_rerun=True),
     "file_valid.{slot}": CheckSpec("File is a readable PDF or image", "intake", ["doc:{slot}"], slots=SLOTS),
     "injection.form": CheckSpec("No instructions hidden in form fields", "injection_scan", ["form:*"], always_rerun=True),
     "injection.{slot}": CheckSpec("No instructions or hidden text in the file", "injection_scan", ["doc:{slot}"], always_rerun=True, slots=SLOTS),

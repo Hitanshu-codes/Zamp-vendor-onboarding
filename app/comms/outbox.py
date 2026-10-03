@@ -117,15 +117,15 @@ async def route(ctx) -> None:
         items = fixable_items(results, ctx.form.get("country", ""))
         token = db.query_one("SELECT resubmit_token FROM submissions WHERE id = ?", (ctx.submission_id,))["resubmit_token"] or secrets.token_urlsafe(18)
         due = (now + timedelta(days=config.vendor_response_due_days)).date().isoformat()
-        db.execute("UPDATE submissions SET resubmit_token = ?, requested_items_json = ?, due_at = ?, reminders_sent = 0 WHERE id = ?",
-                   (token, db.dumps(items), due, ctx.submission_id))
+        db.execute("UPDATE submissions SET resubmit_token = ?, requested_items_json = ?, requested_at = ?, due_at = ?, reminders_sent = 0 WHERE id = ?",
+                   (token, db.dumps(items), clock.now_iso(), due, ctx.submission_id))
         email_id, sent = await send_vendor_email(ctx, "request", "vendor_request.txt", codes,
                                                  items=[i["text"] for i in items], due_date=due, resubmit_url=resubmit_url(token))
         ctx.info(f"Sent one consolidated request listing {len(items)} item(s) to fix, due {due}.", email_id=email_id, delivery=sent,
                  items=[i["text"] for i in items], resubmit_path=f"/resubmit/{token}")
     elif d.vendor_message == "holding":
         email_id, sent = await send_vendor_email(ctx, "holding", "vendor_holding.txt", codes)
-        case_id = open_review_case(ctx, d)
+        case_id = open_review_case(ctx, d, tasks=case_tasks(ctx))
         ctx.info("Opened a review case. The vendor received a neutral holding notice that gives no reasons.",
                  email_id=email_id, delivery=sent, case_id=case_id)
     elif d.vendor_message == "closure":
@@ -134,6 +134,15 @@ async def route(ctx) -> None:
     else:
         email_id, sent = await send_vendor_email(ctx, "approval", "vendor_approval.txt", codes)
         ctx.info("Approval notice sent.", email_id=email_id, delivery=sent)
+
+
+def case_tasks(ctx) -> list[str]:
+    if ctx.trigger != "bank_change":
+        return []
+    vendor = db.query_one("SELECT v.* FROM vendors v JOIN submissions s ON s.vendor_id = v.id WHERE s.id = ?", (ctx.submission_id,))
+    phone = vendor["contact_phone"] if vendor and vendor["contact_phone"] else "the number in the original onboarding records"
+    return [f"Call back the vendor on the phone number already on file ({phone}). Do not use any contact details from the change request.",
+            "Confirm the new account holder and number verbally before approving. Payments stay on hold until then."]
 
 
 def open_review_case(ctx, d, tasks: list[str] | None = None) -> int:

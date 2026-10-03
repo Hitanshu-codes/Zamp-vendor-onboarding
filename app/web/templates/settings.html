@@ -6,7 +6,7 @@
 </div>
 
 {% if saved == "1" %}<div class="notice ok" role="status">Settings saved.</div>{% endif %}
-{% if saved == "clock" %}<div class="notice ok" role="status">Clock updated. Simulated date is now {{ sim_today }}.</div>{% endif %}
+{% if saved == "clock" %}<div class="notice ok" role="status">Clock updated. Simulated date is now {{ sim_today }}. Scheduler: {{ tick.reminders }} reminder(s) sent, {{ tick.closed }} request(s) auto-closed.</div>{% endif %}
 {% if saved == "reset" %}<div class="notice ok" role="status">Demo data reset and re-seeded.</div>{% endif %}
 
 <div class="grid-2">

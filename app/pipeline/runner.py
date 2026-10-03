@@ -108,7 +108,7 @@ def _load_context(run_id: int) -> RunContext:
         data = open(d["storage_path"], "rb").read()
         ctx.docs[d["slot"]] = DocInfo(slot=d["slot"], document_id=d["id"], filename=d["filename"], sha256=d["sha256"], mime="", size=d["size"], data=data)
 
-    if run["trigger"] in ("resubmission", "manual_rerun"):
+    if run["trigger"] in ("resubmission", "manual_rerun", "bank_change"):
         prev = db.query_one("SELECT * FROM runs WHERE submission_id = ? AND id < ? AND finished_at IS NOT NULL ORDER BY id DESC LIMIT 1",
                             (run["submission_id"], run_id))
         if prev:

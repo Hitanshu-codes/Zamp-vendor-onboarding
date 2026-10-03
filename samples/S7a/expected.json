@@ -12,6 +12,7 @@
     "replace_docs": [
       "tax_cert"
     ],
-    "form_changes": {}
+    "form_changes": {},
+    "trigger": "resubmission"
   }
 }

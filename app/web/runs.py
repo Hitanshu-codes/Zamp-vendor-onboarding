@@ -42,7 +42,7 @@ def sample_detail(sid: str):
     meta = json.loads((folder / "expected.json").read_text(encoding="utf-8"))
     files = [p.name for p in sorted(folder.glob("*")) if p.suffix in (".pdf", ".png", ".jpg") and not p.stem.endswith("_v2")]
     return {"id": sid, "form": json.loads((folder / "form.json").read_text(encoding="utf-8")), "files": files,
-            "title": meta["title"], "notes": meta.get("notes", ""), "expected": meta["expected"]}
+            "title": meta["title"], "notes": meta.get("notes", ""), "expected": meta["expected"], "resubmission": meta.get("resubmission")}
 
 
 @router.get("/samples/{sid}/{name}")

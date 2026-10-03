@@ -166,5 +166,16 @@
         "UNREQUESTED_CHANGE"
       ]
     }
+  },
+  {
+    "id": "S14",
+    "title": "Bank change after approval",
+    "expected": {
+      "status": "pending",
+      "route": "manual_review",
+      "codes": [
+        "BANK_CHANGE_REQUEST"
+      ]
+    }
   }
 ]

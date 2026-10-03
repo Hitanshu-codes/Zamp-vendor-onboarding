@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Awaiting vendor{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Awaiting vendor</h1><p>Requests sent to vendors for fixable items. Reminders go out on day 3 and day 7; requests close automatically after the configured number of days.</p></div>
+  <a class="btn" href="/settings">Advance the clock</a>
+</div>
+
+<div class="card flush">
+  {% if rows %}
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Vendor</th><th>Outstanding items</th><th>Due</th><th>Reminders</th><th></th></tr></thead>
+      <tbody>
+      {% for s in rows %}
+        <tr>
+          <td><strong>{{ s.vendor_name }}</strong><div class="small muted">#{{ s.id }} · v{{ s.current_version }} · {{ s.country }}</div></td>
+          <td><ul class="compact">{% for i in loads(s.requested_items_json, []) %}<li>{{ i.text }}</li>{% endfor %}</ul></td>
+          <td class="small">{{ s.due_at or "" }}</td>
+          <td>{{ reminders.get(s.id, 0) }}</td>
+          <td>{% if s.resubmit_token %}<a class="btn" href="/resubmit/{{ s.resubmit_token }}">Open vendor portal</a>{% endif %}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty"><div class="icon" aria-hidden="true">✉</div><h2>No outstanding vendor requests</h2><p>When a submission has only fixable problems, the vendor gets one consolidated request and it is tracked here.</p></div>
+  {% endif %}
+</div>
+
+{% if closed %}
+<div class="card flush">
+  <div style="padding:16px 20px 0"><h2>Auto-closed (no response)</h2></div>
+  <div class="table-wrap"><table class="data"><thead><tr><th>Vendor</th><th>Closed</th></tr></thead>
+  <tbody>{% for s in closed %}<tr><td>{{ s.vendor_name }} <span class="muted small">#{{ s.id }}</span></td><td class="small">{{ s.updated_at[:10] }}</td></tr>{% endfor %}</tbody></table></div>
+</div>
+{% endif %}
+{% endblock %}

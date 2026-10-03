@@ -97,6 +97,14 @@ def unrequested_change(ctx: RunContext):
     return passed("The resubmission only changed the items we asked for.", **ev)
 
 
+def bank_change(ctx: RunContext):
+    if ctx.trigger != "bank_change":
+        return skipped("Not a bank change.")
+    return failed("BANK_CHANGE_REQUEST", "An approved vendor asked to change where we pay them. Payments are on hold until a person verifies "
+                  "the request by calling the vendor on the phone number already on file (never a number from the request itself).",
+                  changed=sorted(ctx.changed or []))
+
+
 async def run(ctx: RunContext) -> None:
     def form_check():
         missing = forms.missing_fields(ctx.form)
@@ -107,6 +115,7 @@ async def run(ctx: RunContext) -> None:
 
     await ctx.check("form_complete", form_check)
     await ctx.check("unrequested_change", lambda: unrequested_change(ctx))
+    await ctx.check("bank_change_request", lambda: bank_change(ctx))
     for slot in SLOTS:
         doc = ctx.docs.get(slot)
         name = f"file_valid.{slot}"

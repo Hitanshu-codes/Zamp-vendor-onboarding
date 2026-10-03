@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Vendor portal{% endblock %}
+{% block content %}
+<div class="portal-banner" role="note">Simulated vendor portal. This is the page a vendor reaches from the secure link in their email.</div>
+<div class="page-head">
+  <div><h1>Update your registration</h1><p>{{ form.legal_name }}</p></div>
+</div>
+
+{% if sent %}
+<div class="card">
+  <h2>Thank you, we've received your update</h2>
+  <p>We'll check it now and let you know if anything else is needed.</p>
+  <p class="hint">Demo shortcut (internal view): <a href="/runs/{{ sent }}">watch the re-run</a></p>
+</div>
+{% elif not open_for_changes %}
+<div class="card"><h2>No changes needed</h2><p>This registration isn't waiting for anything from you right now.</p>
+  {% if last_run_id %}<p class="hint">Demo shortcut (internal view): <a href="/runs/{{ last_run_id }}">latest run</a></p>{% endif %}</div>
+{% else %}
+<div class="card">
+  <h2>What we need from you</h2>
+  <ul class="tasklist">{% for i in items %}<li>☐ {{ i.text }}</li>{% endfor %}</ul>
+  <p class="hint">Please respond by {{ sub.due_at }}. You only need to change what is listed; everything else was checked and is fine.</p>
+</div>
+
+<form method="post" action="/resubmit/{{ token }}" enctype="multipart/form-data" class="grid-2 submit-grid" id="portal-form">
+  <div class="card">
+    <h2>Your details</h2>
+    {% for f in fields %}
+      <div class="field">
+        <label for="p-{{ f.name }}">{{ f.label }}</label>
+        {% if f.name == "country" %}
+          <select id="p-{{ f.name }}" name="country">{% for code, name in countries.items() %}<option value="{{ code }}" {% if form.country == code %}selected{% endif %}>{{ name }}</option>{% endfor %}</select>
+        {% elif f.name == "entity_type" %}
+          <select id="p-{{ f.name }}" name="entity_type">{% for k, v in entity_types.items() %}<option value="{{ k }}" {% if form.entity_type == k %}selected{% endif %}>{{ v }}</option>{% endfor %}</select>
+        {% elif f.name == "vendor_category" %}
+          <select id="p-{{ f.name }}" name="vendor_category">{% for k, v in categories.items() %}<option value="{{ k }}" {% if form.vendor_category == k %}selected{% endif %}>{{ v }}</option>{% endfor %}</select>
+        {% else %}
+          <input id="p-{{ f.name }}" name="{{ f.name }}" type="text" value="{{ form.get(f.name, '') }}" autocomplete="off">
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  <div>
+    <div class="card">
+      <h2>Replace documents</h2>
+      <p class="hint" style="margin-top:-6px">Only upload the documents you were asked for. PDF, PNG or JPEG, up to {{ max_mb }} MB.</p>
+      {% for slot, label in slots %}
+      <label class="dropzone" for="p-{{ slot }}" data-slot="{{ slot }}">
+        <input id="p-{{ slot }}" name="{{ slot }}" type="file" accept=".pdf,.png,.jpg,.jpeg">
+        <span class="dz-title">{{ label|capitalize }}</span>
+        <span class="dz-file" data-empty="Keep the current file">Keep the current file</span>
+      </label>
+      {% endfor %}
+      {% if v2_samples %}
+      <div class="demo-helper">
+        <label for="v2-sample" class="small">Demo helper: attach corrected files from sample</label>
+        <div class="row"><select id="v2-sample">{% for sid in v2_samples %}<option value="{{ sid }}">{{ sid }}</option>{% endfor %}</select>
+        <button type="button" class="btn" id="attach-v2">Attach</button></div>
+      </div>
+      {% endif %}
+    </div>
+    <div class="submit-actions"><button class="btn primary btn-lg" type="submit">Send update</button></div>
+  </div>
+</form>
+{% endif %}
+{% endblock %}
+{% block scripts %}<script src="/static/submit.js" defer></script><script src="/static/portal.js" defer></script>{% endblock %}

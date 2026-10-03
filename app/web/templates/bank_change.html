@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Bank change{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><p class="eyebrow">Vendor #{{ vendor.id }} · submission #{{ sub.id }}</p><h1>Request a bank change</h1><p>{{ vendor.legal_name }}</p></div>
+</div>
+{% if error %}<div class="notice bad" role="alert">{{ error }}</div>{% endif %}
+<div class="notice warn">Submitting puts this vendor's payments <strong>on hold</strong> and opens a review case. A reviewer must call the vendor back on the phone number already on file before the new details are used.</div>
+<form class="card" method="post" action="/submissions/{{ sub.id }}/bank-change" enctype="multipart/form-data" style="max-width:640px">
+  <dl class="kv" style="margin-bottom:16px"><dt>Current account</dt><dd><code>{{ vendor.bank_account }}</code> ({{ vendor.bank_code }})</dd><dt>Payment hold</dt><dd>{{ "yes" if vendor.payment_hold else "no" }}</dd></dl>
+  <div class="field"><label for="bc-holder">New account holder</label><input id="bc-holder" name="bank_account_holder" type="text" required></div>
+  <div class="row">
+    <div class="field" style="flex:1"><label for="bc-acct">New account number</label><input id="bc-acct" name="bank_account_number" type="text"></div>
+    <div class="field" style="flex:1"><label for="bc-iban">or IBAN</label><input id="bc-iban" name="iban" type="text"></div>
+  </div>
+  <div class="field"><label for="bc-code">Bank code</label><input id="bc-code" name="bank_code" type="text" required></div>
+  <label class="dropzone" for="bc-letter"><input id="bc-letter" name="bank_letter" type="file" accept=".pdf,.png,.jpg,.jpeg" required>
+    <span class="dz-title">New bank letter</span><span class="dz-file" data-empty="Drop a file here or click to choose">Drop a file here or click to choose</span></label>
+  <button class="btn primary" type="submit">Submit bank change</button>
+</form>
+{% endblock %}
+{% block scripts %}<script src="/static/submit.js" defer></script>{% endblock %}

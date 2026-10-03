@@ -39,6 +39,10 @@
       <div id="decision-body"><p class="muted" id="decision-wait"><span class="spinner" aria-hidden="true"></span> Waiting for all checks to finish…</p></div>
     </div>
     <p class="hint conn" id="conn-status"></p>
+    {% if sub.vendor_id and sub.status == "approved" and run.finished_at %}
+    <div class="card"><h2>Approved vendor</h2><p class="small muted">Vendor #{{ sub.vendor_id }} is active.</p>
+      <a class="btn" href="/submissions/{{ sub.id }}/bank-change">Request bank change</a></div>
+    {% endif %}
   </aside>
 </div>
 {% endblock %}

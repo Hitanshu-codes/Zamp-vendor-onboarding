@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Review queue{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Review queue</h1><p>Submissions that need a person's judgement, highest priority first. Vendors in this queue were sent a neutral holding notice.</p></div>
+</div>
+
+{% macro prio(p) -%}
+  {%- if p == 1 -%}<span class="badge b-bad"><span class="i" aria-hidden="true">▲</span>High</span>
+  {%- elif p == 2 -%}<span class="badge b-review"><span class="i" aria-hidden="true">●</span>Medium</span>
+  {%- else -%}<span class="badge b-neutral"><span class="i" aria-hidden="true">○</span>Normal</span>{%- endif -%}
+{%- endmacro %}
+
+<div class="card flush">
+  {% if cases %}
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Priority</th><th>Case</th><th>Vendor</th><th>Why</th><th>Opened</th><th></th></tr></thead>
+      <tbody>
+      {% for c in cases %}
+        <tr>
+          <td>{{ prio(c.priority) }}</td>
+          <td>#{{ c.id }}</td>
+          <td><strong>{{ c.vendor_name }}</strong><div class="small muted">{{ c.country }} · v{{ c.current_version }}</div></td>
+          <td><div class="chips">{% set rs = loads(c.reasons_json, []) %}{% for code in rs|map(attribute='code')|unique %}{% set sev = (rs|selectattr('code', 'equalto', code)|first).severity %}<span class="badge {{ {'escalate':'b-review','reject':'b-bad','fixable':'b-warn'}.get(sev, 'b-info') }} code">{{ code }}</span>{% endfor %}</div></td>
+          <td class="small">{{ c.opened_at[:16]|replace('T', ' ') }}</td>
+          <td><a class="btn" href="/review/{{ c.id }}">Open case</a></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty"><div class="icon" aria-hidden="true">✓</div><h2>Nothing to review</h2><p>Escalated submissions (bank collisions, watchlist or sanctions hits, injection attempts, unclear cases) appear here.</p></div>
+  {% endif %}
+</div>
+
+{% if resolved %}
+<div class="card flush">
+  <div style="padding:16px 20px 0"><h2>Recently resolved</h2></div>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Case</th><th>Vendor</th><th>Outcome</th><th>Reviewer</th></tr></thead>
+      <tbody>{% for c in resolved %}<tr><td><a href="/review/{{ c.id }}">#{{ c.id }}</a></td><td>{{ c.vendor_name }}</td><td>{{ c.status }}</td><td>{{ c.assignee or "" }}</td></tr>{% endfor %}</tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

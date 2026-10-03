@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS submissions (
     closed_reason TEXT,
     resubmit_token TEXT UNIQUE,
     requested_items_json TEXT NOT NULL DEFAULT '[]',
+    requested_at TEXT,
     due_at TEXT,
     reminders_sent INTEGER NOT NULL DEFAULT 0,
     vendor_id INTEGER REFERENCES vendors(id)

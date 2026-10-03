@@ -16,9 +16,10 @@ def add_vendor(submission_id: int, form: dict) -> int:
         return row["vendor_id"]
     vid = db.execute(
         "INSERT INTO vendors(legal_name, normalized_name, country, tax_id, bank_account, bank_code, status, email_domain,"
-        " source_submission_id, created_at) VALUES (?,?,?,?,?,?, 'active', ?,?,?)",
+        " contact_phone, source_submission_id, created_at) VALUES (?,?,?,?,?,?, 'active', ?,?,?,?)",
         (form["legal_name"], normalize_name(form["legal_name"]), form["country"], form["tax_id"],
-         normalize_account(forms.account(form)), form["bank_code"], email_domain(form["contact_email"]), submission_id, clock.now_iso()),
+         normalize_account(forms.account(form)), form["bank_code"], email_domain(form["contact_email"]), form.get("contact_phone") or None,
+         submission_id, clock.now_iso()),
     )
     db.execute("UPDATE submissions SET vendor_id = ? WHERE id = ?", (vid, submission_id))
     return vid

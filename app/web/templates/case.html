@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block title %}Case #{{ view.case.id }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="eyebrow">Review case #{{ view.case.id }} · priority {{ priority_label[view.case.priority] }} · submission #{{ view.submission.id }} v{{ view.submission.current_version }}</p>
+    <h1>{{ view.form.legal_name }}</h1>
+    <p>{{ view.form.country }} · {{ (view.form.entity_type or "")|replace('_', ' ') }} · status {{ view.submission.status }} / {{ view.submission.route|replace('_', ' ') }}</p>
+  </div>
+  <div class="row">
+    {% if view.case.run_id %}<a class="btn" href="/runs/{{ view.case.run_id }}">Full run</a>{% endif %}
+    {% if brief %}<a class="btn" href="/emails/{{ brief.id }}">Reviewer brief</a>{% endif %}
+  </div>
+</div>
+
+{% if error %}<div class="notice bad" role="alert">{{ error }}</div>{% endif %}
+{% if done %}<div class="notice ok" role="status">Action recorded: {{ done }}.</div>{% endif %}
+{% if view.case.state != "open" %}<div class="notice warn" role="status">This case is resolved. Actions are shown below in the history.</div>{% endif %}
+
+{% if tasks %}
+<div class="card task-card">
+  <h2>Required before deciding</h2>
+  <ul class="tasklist">{% for t in tasks %}<li>☐ {{ t }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
+
+<div class="card">
+  <h2>Why this needs a person</h2>
+  <div class="problem-list">
+  {% for c in checks %}
+    <div class="problem">
+      <div class="row" style="gap:8px">
+        <span class="badge {{ 'b-bad' if c.result == 'fail' else 'b-warn' }}"><span class="i" aria-hidden="true">{{ '✕' if c.result == 'fail' else '!' }}</span>{{ 'Fail' if c.result == 'fail' else 'Warning' }}</span>
+        {% if c.reason_code %}<span class="badge {{ {'escalate':'b-review','reject':'b-bad','fixable':'b-warn','soft':'b-info'}[c.severity] }} code">{{ c.reason_code }}</span>{% endif %}
+        <span class="mono small muted">{{ c.check_name }}</span>
+      </div>
+      <p>{{ c.explanation }}</p>
+    </div>
+  {% endfor %}
+  </div>
+</div>
+
+{% if findings %}
+<div class="card flagged">
+  <h2>Flagged content <span class="muted small">(shown as escaped plain text)</span></h2>
+  {% for f in findings %}
+  <div class="finding">
+    <p class="small"><strong>{{ f.source }}</strong> · {{ f.method }} · {{ f.rule }}</p>
+    <pre class="excerpt">{{ f.excerpt }}</pre>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if sanctions_hits or watch_hits %}
+<div class="card">
+  <h2>List matches</h2>
+  <p class="hint">The vendor is never told which list or entry matched. Clearing a near match needs a reason; exact sanctions matches cannot be cleared.</p>
+  <div class="table-wrap">
+  <table class="data">
+    <thead><tr><th>List</th><th>Entry</th><th>Matched on</th><th>Type</th><th></th></tr></thead>
+    <tbody>
+    {% for h in sanctions_hits %}
+      <tr><td>{{ h.list }}</td><td>{{ h.entry_name }}</td><td>{{ h.screened_role }}: {{ h.screened_name }}</td><td>{{ h.match_type }} ({{ h.score }})</td>
+        <td>{% if ("sanctions", h.entry_id) in cleared %}<span class="badge b-ok">✓ cleared</span>{% elif h.match_type == "fuzzy" and view.case.state == "open" %}
+          <form method="post" action="/review/{{ view.case.id }}/clear" class="inline-form"><input type="hidden" name="list" value="sanctions"><input type="hidden" name="entry_id" value="{{ h.entry_id }}">
+          <input type="text" name="reason" placeholder="Reason (e.g. different address and registration no.)" required aria-label="Reason for clearing"><button class="btn" type="submit">Clear hit</button></form>{% endif %}</td></tr>
+    {% endfor %}
+    {% for h in watch_hits %}
+      <tr><td>Watchlist ({{ h.severity }})</td><td>#{{ h.entry_id }} {{ h.entry_label }}<div class="small muted">{{ h.entry_reason }}</div></td><td>{{ h.matched_kind|replace('_', ' ') }}: {{ h.submitted_value }}</td><td>{{ h.match_type }} ({{ h.score }})</td>
+        <td>{% if ("watchlist", h.entry_id) in cleared %}<span class="badge b-ok">✓ cleared</span>{% elif view.case.state == "open" and (h.match_type == "fuzzy" or h.severity != "blocked") %}
+          <form method="post" action="/review/{{ view.case.id }}/clear" class="inline-form"><input type="hidden" name="list" value="watchlist"><input type="hidden" name="entry_id" value="{{ h.entry_id }}">
+          <input type="text" name="reason" placeholder="Reason" required aria-label="Reason for clearing"><button class="btn" type="submit">Clear hit</button></form>{% endif %}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+{% endif %}
+
+{% if rule_evidence.rule_status == "provisional" %}
+<div class="card">
+  <h2>Provisional tax rule involved</h2>
+  <p>The {{ view.form.country }} rule <code>{{ rule_evidence.regex }}</code> was learned from <a href="{{ rule_evidence.source_url }}" rel="noopener noreferrer" target="_blank">{{ rule_evidence.source_url }}</a> and is not yet verified.
+     If the <strong>rule</strong> is wrong, edit or disable it on the <a href="/rules">Tax rules</a> page; if the <strong>ID</strong> is wrong, use "Request information" below.</p>
+</div>
+{% endif %}
+
+<div class="card flush">
+  <div style="padding:16px 20px 0"><h2>Evidence: form vs documents</h2><p class="hint">Rows with differing values are highlighted.</p></div>
+  <div class="table-wrap">
+    <table class="data evidence-grid">
+      <thead><tr><th>Field</th><th>Form</th>{% for slot, label in slots %}<th>{{ label|capitalize }}</th>{% endfor %}</tr></thead>
+      <tbody>
+      {% for row in grid %}
+        <tr class="{{ 'mismatch' if row.mismatch }}"><td><strong>{{ row.label }}</strong>{% if row.mismatch %} <span class="badge b-warn">≠</span>{% endif %}</td><td>{{ row.form }}</td>
+          {% for slot, _ in slots %}<td>{{ row.cells[slot] }}</td>{% endfor %}</tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="thumbs">
+    {% for slot, label in slots %}{% if docs.get(slot) %}
+      <figure><a href="/documents/{{ docs[slot].id }}/page/1.png" target="_blank" rel="noopener"><img src="/documents/{{ docs[slot].id }}/page/1.png" alt="Page 1 of the {{ label }}" loading="lazy"></a>
+      <figcaption>{{ label|capitalize }} · page 1 · {{ docs[slot].filename }}</figcaption></figure>
+    {% endif %}{% endfor %}
+  </div>
+</div>
+
+{% if view.case.state == "open" %}
+<div class="grid-2">
+  <form class="card" method="post" action="/review/{{ view.case.id }}/approve">
+    <h2>Approve</h2>
+    <div class="field"><label for="approve-reason">Reason (required, goes to the audit trail)</label><textarea id="approve-reason" name="reason" rows="2" required minlength="5"></textarea></div>
+    {% if needs_confirm %}<label class="switch confirm"><input type="checkbox" name="confirm_flagged" value="yes" required> I have inspected the flagged content</label>{% endif %}
+    <button class="btn primary" type="submit">Approve vendor</button>
+  </form>
+  <form class="card" method="post" action="/review/{{ view.case.id }}/reject">
+    <h2>Reject</h2>
+    <div class="field"><label for="reject-reason">Reason (required, internal only)</label><textarea id="reject-reason" name="reason" rows="2" required minlength="5"></textarea></div>
+    <p class="hint">The vendor receives a neutral closure notice with no reason.</p>
+    <button class="btn danger" type="submit">Reject</button>
+  </form>
+</div>
+
+<form class="card" method="post" action="/review/{{ view.case.id }}/request">
+  <h2>Request information from the vendor</h2>
+  <p class="hint">Produces one polite, specific request. It never mentions lists, matches or suspicions.</p>
+  <fieldset class="checks-fieldset"><legend class="sr-only">Items to request</legend>
+  {% for o in options %}<label class="switch"><input type="checkbox" name="items" value="{{ o.key }}"> {{ o.text }}</label>{% endfor %}
+  </fieldset>
+  <div class="field"><label for="request-reason">Internal reason (required)</label><input id="request-reason" name="reason" type="text" required minlength="5"></div>
+  <button class="btn" type="submit">Send request</button>
+</form>
+{% endif %}
+
+<form class="card" method="post" action="/review/{{ view.case.id }}/watchlist">
+  <h2>Add to internal watchlist</h2>
+  <p class="hint">Every identifier from this case is offered. Future submissions are matched on all of them.</p>
+  <fieldset class="checks-fieldset"><legend class="sr-only">Identifiers</legend>
+  {% for kind, value in identifiers %}<label class="switch"><input type="checkbox" name="ident" value="{{ kind }}|{{ value }}" {% if kind in ('bank_account', 'tax_id') %}checked{% endif %}> <span class="muted">{{ kind|replace('_', ' ') }}:</span> {{ value }}</label>{% endfor %}
+  </fieldset>
+  <div class="row">
+    <div class="field" style="flex:1"><label for="severity">Severity</label><select id="severity" name="severity"><option value="watch">Watch (risk points only)</option><option value="high">High (manual review)</option><option value="blocked">Blocked (reject)</option></select></div>
+    <div class="field" style="flex:1"><label for="expires_at">Expires <span class="muted">(optional)</span></label><input id="expires_at" name="expires_at" type="date"></div>
+  </div>
+  <div class="field"><label for="wl-reason">Reason (required)</label><input id="wl-reason" name="reason" type="text" required minlength="5"></div>
+  <button class="btn" type="submit">Add to watchlist</button>
+</form>
+
+<div class="card">
+  <h2>History</h2>
+  {% if history %}
+  <ol class="timeline">{% for a in history %}<li><strong>{{ a.action|replace('_', ' ') }}</strong> by {{ a.reviewer }} <span class="muted small">{{ a.ts[:16]|replace('T', ' ') }}</span><div>{{ a.reason_text }}</div></li>{% endfor %}</ol>
+  {% else %}<p class="muted">No actions yet.</p>{% endif %}
+</div>
+{% endblock %}

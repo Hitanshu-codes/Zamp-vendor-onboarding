@@ -325,6 +325,14 @@ def scenarios() -> dict[str, dict[str, Any]]:
         {"status": "pending", "route": "manual_review", "codes": ["UNREQUESTED_CHANGE"]}, docs={"tax_cert": ("utility_bill", None)},
         resubmission={"replace_docs": ["tax_cert", "bank_letter"], "form_changes": {"bank_account_number": "50100999888777"},
                       "profile_overrides": {"account": "50100999888777"}})
+    p14 = india("Silverbirch Electricals Private Limited", "AASCS1047T", account="50100246813579", bank_code="HDFC0008865",
+                contact_email="accounts@silverbirch.example")
+    add("S14", "Bank change after approval", p14, {"status": "pending", "route": "manual_review", "codes": ["BANK_CHANGE_REQUEST"]},
+        notes="Approved first, then the vendor asks to move payments to a new account.",
+        resubmission={"replace_docs": ["bank_letter"], "form_changes": {"bank_account_number": "50100975318642", "bank_code": "HDFC0001199"},
+                      "profile_overrides": {"account": "50100975318642", "bank_code": "HDFC0001199",
+                                            "bank_name": "HDFC Bank, Powai branch", "letter_date": "2026-09-28"},
+                      "trigger": "bank_change"})
     return s
 
 
@@ -360,7 +368,7 @@ def main() -> None:
             v2 = build_docs(new_profile, {})
             for slot in r["replace_docs"]:
                 (folder / f"{slot}_v2.pdf").write_bytes(v2[slot])
-            meta["resubmission"] = {"replace_docs": r["replace_docs"], "form_changes": r["form_changes"]}
+            meta["resubmission"] = {"replace_docs": r["replace_docs"], "form_changes": r["form_changes"], "trigger": r.get("trigger", "resubmission")}
         (folder / "expected.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
         index.append({"id": sid, "title": sc["title"], "expected": sc["expected"]})
     (SAMPLES / "index.json").write_text(json.dumps(index, indent=2), encoding="utf-8")

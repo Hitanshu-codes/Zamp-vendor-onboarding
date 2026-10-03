@@ -4,7 +4,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import RedirectResponse
 
-from app import audit, clock, db, demo, settings_store
+from app import audit, clock, db, demo, scheduler, settings_store
 from app.config import config
 from app.security.auth import COOKIE, SESSION_MAX_AGE, auth_enabled, make_cookie, password_ok
 from app.web.render import page, templates
@@ -54,18 +54,6 @@ def dashboard(request: Request):
                 empty_title="No submissions yet", empty_body="Run a submission from the Submit page and it will appear here.")
 
 
-@router.get("/review")
-def review_queue(request: Request):
-    return page(request, "placeholder.html", "review", title="Review queue",
-                empty_title="Nothing to review", empty_body="Submissions that need a human decision will be listed here, highest priority first.")
-
-
-@router.get("/awaiting")
-def awaiting(request: Request):
-    return page(request, "placeholder.html", "awaiting", title="Awaiting vendor",
-                empty_title="No outstanding vendor requests", empty_body="When we ask a vendor to fix something, the request and its due date appear here.")
-
-
 @router.get("/rules")
 def rules(request: Request):
     rows = db.query("SELECT * FROM tax_rules ORDER BY country, tax_type")
@@ -86,8 +74,8 @@ def watchlist(request: Request):
 # --- settings ---------------------------------------------------------------
 
 @router.get("/settings")
-def settings_page(request: Request, saved: str = ""):
-    return page(request, "settings.html", "settings", settings=settings_store.all_settings(),
+def settings_page(request: Request, saved: str = "", reminders: int = 0, closed: int = 0):
+    return page(request, "settings.html", "settings", settings=settings_store.all_settings(), tick={"reminders": reminders, "closed": closed},
                 thresholds=config.thresholds(), saved=saved, models=(config.model_extract, config.model_judge),
                 gemini_key_set=bool(config.gemini_api_key), resend_key_set=bool(config.resend_api_key),
                 email_redirect=config.email_redirect_to)
@@ -122,13 +110,14 @@ def settings_save(
 
 
 @router.post("/settings/clock")
-def settings_clock(days: int = Form(...)):
+async def settings_clock(days: int = Form(...)):
     if days == 0:
         clock.reset()
     else:
         clock.advance(max(-365, min(365, days)))
     audit.log(_reviewer_actor(), "clock_changed", "settings", None, {"offset_days": clock.offset_days()})
-    return RedirectResponse("/settings?saved=clock", status_code=303)
+    result = await scheduler.tick()  # reminders and auto-close follow the simulated clock
+    return RedirectResponse(f"/settings?saved=clock&reminders={result['reminders']}&closed={result['closed']}", status_code=303)
 
 
 @router.post("/settings/reset")

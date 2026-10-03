@@ -1,0 +1,23 @@
+{
+  "id": "S14",
+  "title": "Bank change after approval",
+  "notes": "Approved first, then the vendor asks to move payments to a new account.",
+  "expected": {
+    "status": "pending",
+    "route": "manual_review",
+    "codes": [
+      "BANK_CHANGE_REQUEST"
+    ]
+  },
+  "settings": {},
+  "resubmission": {
+    "replace_docs": [
+      "bank_letter"
+    ],
+    "form_changes": {
+      "bank_account_number": "50100975318642",
+      "bank_code": "HDFC0001199"
+    },
+    "trigger": "bank_change"
+  }
+}

@@ -32,6 +32,7 @@ FIELDS = [
     Field("registered_address", "Registered address"),
     Field("contact_name", "Contact name"),
     Field("contact_email", "Contact email"),
+    Field("contact_phone", "Contact phone", required=False),
     Field("tax_id", "Tax ID"),
     Field("tax_id_type", "Tax ID type", required=False),
     Field("bank_account_holder", "Bank account holder"),
