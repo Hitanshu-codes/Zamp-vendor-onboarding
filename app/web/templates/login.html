@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in · Vendor Onboarding</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <div class="login-wrap">
+    <form class="card login-card" method="post" action="/login">
+      <div class="brand" style="padding:0 0 16px"><span class="brand-mark" aria-hidden="true">VO</span><span>Vendor Onboarding</span></div>
+      <h1>Sign in</h1>
+      <p class="muted">This demo is password protected. Use the password you were given.</p>
+      {% if error %}<div class="notice bad" role="alert">{{ error }}</div>{% endif %}
+      <input type="hidden" name="next" value="{{ next }}">
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required autofocus>
+      </div>
+      <button class="btn primary" type="submit">Sign in</button>
+    </form>
+  </div>
+</body>
+</html>

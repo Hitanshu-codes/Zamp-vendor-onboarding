@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Settings</h1><p>Demo controls. Every change is written to the audit log.</p></div>
+</div>
+
+{% if saved == "1" %}<div class="notice ok" role="status">Settings saved.</div>{% endif %}
+{% if saved == "clock" %}<div class="notice ok" role="status">Clock updated. Simulated date is now {{ sim_today }}.</div>{% endif %}
+{% if saved == "reset" %}<div class="notice ok" role="status">Demo data reset and re-seeded.</div>{% endif %}
+
+<div class="grid-2">
+  <form class="card" method="post" action="/settings">
+    <h2>LLM and reviewer</h2>
+    <div class="field">
+      <input type="hidden" name="llm_enabled" value="false">
+      <label class="switch"><input type="checkbox" name="llm_enabled" value="true" {% if settings.llm_enabled == "true" %}checked{% endif %}> LLM enabled</label>
+      <div class="hint">Turn off to simulate an outage. Runs still finish, and anything needing the LLM goes to manual review.</div>
+    </div>
+    <div class="field">
+      <label for="llm_mode">LLM mode</label>
+      <select id="llm_mode" name="llm_mode">
+        {% for m, d in [("live", "Live: real Gemini calls"), ("record", "Record: live, and save responses"), ("replay", "Replay: saved responses only, no API key needed")] %}
+          <option value="{{ m }}" {% if settings.llm_mode == m %}selected{% endif %}>{{ d }}</option>
+        {% endfor %}
+      </select>
+      <div class="hint">Models: extract <code>{{ models[0] }}</code>, judge <code>{{ models[1] }}</code>. API key {% if gemini_key_set %}configured{% else %}<strong>not configured</strong>{% endif %}.</div>
+    </div>
+    <div class="field">
+      <label for="search_provider">Tax-rule search provider</label>
+      <select id="search_provider" name="search_provider">
+        <option value="gemini" {% if settings.search_provider == "gemini" %}selected{% endif %}>Gemini + Google Search (live)</option>
+        <option value="fixture" {% if settings.search_provider == "fixture" %}selected{% endif %}>Fixture pages (offline / tests)</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="reviewer_name">Reviewer name</label>
+      <input id="reviewer_name" name="reviewer_name" type="text" maxlength="60" value="{{ settings.reviewer_name }}">
+    </div>
+    <div class="field">
+      <input type="hidden" name="evaluator_view" value="false">
+      <label class="switch"><input type="checkbox" name="evaluator_view" value="true" {% if settings.evaluator_view == "true" %}checked{% endif %}> Evaluator view</label>
+      <div class="hint">Hides the expected outcome captions on sample scenarios.</div>
+    </div>
+    <button class="btn primary" type="submit">Save settings</button>
+  </form>
+
+  <div>
+    <div class="card">
+      <h2>Simulated clock</h2>
+      <p class="muted">Moves "today" forward so reminders (day 3, day 7) and auto-close (day 14) can be shown in seconds.</p>
+      <p>Simulated date: <strong>{{ sim_today }}</strong>{% if clock_offset %} <span class="muted">(+{{ clock_offset }} days)</span>{% endif %}</p>
+      <div class="row">
+        {% for d in [1, 7, 15] %}
+        <form method="post" action="/settings/clock"><input type="hidden" name="days" value="{{ d }}"><button class="btn" type="submit">Advance {{ d }} day{% if d > 1 %}s{% endif %}</button></form>
+        {% endfor %}
+        <form method="post" action="/settings/clock"><input type="hidden" name="days" value="0"><button class="btn" type="submit">Reset to today</button></form>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Email delivery</h2>
+      <dl class="kv">
+        <dt>Provider</dt><dd>{{ email_provider }}{% if email_provider == "resend" %} (API key {% if resend_key_set %}configured{% else %}<strong>missing</strong>{% endif %}){% endif %}</dd>
+        <dt>Redirect</dt><dd>{% if email_redirect %}All vendor emails delivered to <code>{{ email_redirect }}</code>{% else %}<span class="muted">none (sent to the vendor's address)</span>{% endif %}</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <h2>Reset demo data</h2>
+      <p class="muted">Deletes all submissions, runs, learned tax rules and the audit log, then re-seeds the reference data.</p>
+      <form method="post" action="/settings/reset" onsubmit="return confirm('Reset all demo data?');">
+        <button class="btn danger" type="submit">Reset demo data</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="card flush">
+  <div style="padding:16px 20px 0"><h2>Thresholds <span class="muted small">(read-only, set by environment)</span></h2></div>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Setting</th><th>Value</th></tr></thead>
+      <tbody>
+        {% for k, v in thresholds.items() %}<tr><td><code>{{ k }}</code></td><td>{{ v }}</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

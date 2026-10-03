@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Vendor Onboarding{% endblock %} · Vendor Onboarding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/app.css">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <div class="banner" role="note">
+    <strong>Demo mode</strong>
+    <span>All data is fictional</span>
+    <span class="sep">|</span>
+    <span>LLM:
+      {% if llm_enabled %}<strong>on</strong> ({{ llm_mode }}){% else %}<span class="flag-off">off (kill switch)</span>{% endif %}
+    </span>
+    <span class="sep">|</span>
+    <span>Email: {{ email_provider }}</span>
+    <span class="sep">|</span>
+    <span>Date: {{ sim_today }}{% if clock_offset %} (simulated +{{ clock_offset }}d){% endif %}</span>
+  </div>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">VO</span><span>Vendor Onboarding</span></div>
+      <nav class="nav" aria-label="Main">
+        {% for key, href, label in nav %}
+          <a href="{{ href }}" {% if key == active %}aria-current="page"{% endif %}>{{ label }}</a>
+        {% endfor %}
+      </nav>
+      <div class="who">
+        Reviewer<strong>{{ reviewer }}</strong>
+        {% if auth_enabled %}<a href="/logout" class="small">Sign out</a>{% endif %}
+      </div>
+    </aside>
+    <main class="main" id="main">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

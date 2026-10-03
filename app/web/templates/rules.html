@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Tax rules{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Tax ID rules</h1><p>Format rules by country and tax type. Rules learned from the web start as provisional until verified.</p></div>
+</div>
+
+{% macro status_badge(s) -%}
+  {%- if s == "seed" -%}<span class="badge b-info"><span class="i" aria-hidden="true">■</span>Seed</span>
+  {%- elif s == "verified" -%}<span class="badge b-ok"><span class="i" aria-hidden="true">✓</span>Verified</span>
+  {%- elif s == "provisional" -%}<span class="badge b-warn"><span class="i" aria-hidden="true">◐</span>Provisional</span>
+  {%- else -%}<span class="badge b-neutral"><span class="i" aria-hidden="true">✕</span>Disabled</span>{%- endif -%}
+{%- endmacro %}
+
+<div class="card flush">
+  {% if rules %}
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Country</th><th>Type</th><th>Status</th><th>Format</th><th>Example</th><th>Used / confirmed</th><th>Last verified</th><th>Source</th></tr></thead>
+      <tbody>
+      {% for r in rules %}
+        <tr>
+          <td><strong>{{ r.country }}</strong></td>
+          <td>{{ r.tax_type }}</td>
+          <td>{{ status_badge(r.status) }}</td>
+          <td><div class="small">{{ r.description }}</div><code>{{ r.regex }}</code>{% if r.checksum_algo %}<div class="small muted">checksum: {{ r.checksum_algo }}</div>{% endif %}</td>
+          <td><code>{{ r.example }}</code></td>
+          <td>{{ r.times_used }} / {{ r.times_confirmed }}</td>
+          <td class="small">{{ (r.last_verified_at or "")[:10] }}</td>
+          <td class="small">{% if r.source_url %}<a href="{{ r.source_url }}" rel="noopener noreferrer" target="_blank">{{ r.source_url.split('/')[2] }}</a>{% endif %}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty"><h2>No rules</h2><p>Reset demo data to restore the seed rules.</p></div>
+  {% endif %}
+</div>
+
+<div class="card flush">
+  <div style="padding:16px 20px 0"><h2>Search log</h2></div>
+  {% if search_log %}
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>When</th><th>Country / type</th><th>Outcome</th><th>Notes</th></tr></thead>
+      <tbody>
+      {% for s in search_log %}
+        <tr><td class="small">{{ s.ts }}</td><td>{{ s.country }} {{ s.tax_type }}</td><td>{{ s.outcome }}</td><td class="small">{{ s.notes or "" }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty"><p>No web searches yet. A search runs the first time a vendor's country has no rule.</p></div>
+  {% endif %}
+</div>
+{% endblock %}

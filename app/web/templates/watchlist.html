@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Watchlist{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Internal watchlist</h1><p>Previously flagged vendors. New submissions are matched on every identifier, not just the name.</p></div>
+</div>
+
+{% macro sev_badge(s) -%}
+  {%- if s == "blocked" -%}<span class="badge b-bad"><span class="i" aria-hidden="true">⛔</span>Blocked</span>
+  {%- elif s == "high" -%}<span class="badge b-review"><span class="i" aria-hidden="true">▲</span>High</span>
+  {%- else -%}<span class="badge b-warn"><span class="i" aria-hidden="true">●</span>Watch</span>{%- endif -%}
+{%- endmacro %}
+
+<div class="card flush">
+  {% if entries %}
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Entry</th><th>Severity</th><th>Identifiers</th><th>Reason</th><th>Added</th></tr></thead>
+      <tbody>
+      {% for e in entries %}
+        <tr>
+          <td><strong>{{ e.label }}</strong>{% if not e.active %} <span class="badge b-neutral">inactive</span>{% endif %}</td>
+          <td>{{ sev_badge(e.severity) }}</td>
+          <td><div class="chips">{% for i in idents.get(e.id, []) %}<span class="chip" title="{{ i.kind }}">{{ i.kind|replace('_', ' ') }}: {{ i.value_display }}</span>{% endfor %}</div></td>
+          <td class="small">{{ e.reason }}</td>
+          <td class="small">{{ e.added_by }}<br><span class="muted">{{ e.added_at[:10] }}</span></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty"><h2>Watchlist is empty</h2><p>Entries can be added from any review case.</p></div>
+  {% endif %}
+</div>
+{% endblock %}
