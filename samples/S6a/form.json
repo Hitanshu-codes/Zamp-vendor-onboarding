@@ -1,0 +1,16 @@
+{
+  "legal_name": "Pale Harbor Logistics Ltd",
+  "trade_name": "",
+  "country": "GB",
+  "entity_type": "company",
+  "registered_address": "Unit 4, Riverside Park, Leeds LS11 5DF, United Kingdom",
+  "contact_name": "Harriet Lowe",
+  "contact_email": "finance@pale.example",
+  "tax_id": "GB246813579",
+  "tax_id_type": "VAT",
+  "bank_account_holder": "Pale Harbor Logistics Ltd",
+  "bank_account_number": "",
+  "iban": "GB28NGBK40112233445566",
+  "bank_code": "NGBKGB2L",
+  "vendor_category": "goods"
+}

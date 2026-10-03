@@ -1,0 +1,13 @@
+{
+  "id": "S1",
+  "title": "Wrong document in the tax slot",
+  "notes": "",
+  "expected": {
+    "status": "pending",
+    "route": "vendor_followup",
+    "codes": [
+      "DOC_WRONG_TYPE"
+    ]
+  },
+  "settings": {}
+}

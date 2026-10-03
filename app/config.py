@@ -23,8 +23,8 @@ def _str(name: str, default: str = "") -> str:
 @dataclass(frozen=True)
 class Config:
     gemini_api_key: str = field(default_factory=lambda: _str("GEMINI_API_KEY") or _str("GOOGLE_API_KEY"))
-    model_extract: str = field(default_factory=lambda: _str("MODEL_EXTRACT", "gemini-3.8-flash"))
-    model_judge: str = field(default_factory=lambda: _str("MODEL_JUDGE", "gemini-3.8-flash"))
+    model_extract: str = field(default_factory=lambda: _str("MODEL_EXTRACT", "gemini-3.5-flash-lite"))
+    model_judge: str = field(default_factory=lambda: _str("MODEL_JUDGE", "gemini-3.5-flash-lite"))
     llm_mode: str = field(default_factory=lambda: _str("LLM_MODE", "replay"))  # live | record | replay
     llm_timeout_seconds: int = field(default_factory=lambda: _int("LLM_TIMEOUT_SECONDS", 45))
     search_provider: str = field(default_factory=lambda: _str("SEARCH_PROVIDER", "gemini"))  # gemini | fixture

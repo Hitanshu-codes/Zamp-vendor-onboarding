@@ -43,6 +43,12 @@ def iban_valid(value: str) -> tuple[bool, str]:
     return True, "valid"
 
 
+def make_iban(country: str, bban: str) -> str:
+    """Build an IBAN with correct check digits (for fictional sample data)."""
+    digits = "".join(str(int(c, 36)) for c in (bban + country + "00").upper())
+    return f"{country}{98 - int(digits) % 97:02d}{bban}"
+
+
 def aba_valid(routing: str) -> bool:
     r = normalize_account(routing)
     if not ABA_RE.match(r):

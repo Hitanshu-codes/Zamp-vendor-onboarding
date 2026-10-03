@@ -1,0 +1,13 @@
+{
+  "id": "S4c",
+  "title": "ID fails the provisional rule",
+  "notes": "Run after S4a. The EIN has 8 digits instead of 9.",
+  "expected": {
+    "status": "pending",
+    "route": "manual_review",
+    "codes": [
+      "RULE_PROVISIONAL_MISMATCH"
+    ]
+  },
+  "settings": {}
+}

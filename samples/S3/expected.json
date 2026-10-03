@@ -1,0 +1,13 @@
+{
+  "id": "S3",
+  "title": "Bank account belongs to another vendor",
+  "notes": "",
+  "expected": {
+    "status": "pending",
+    "route": "manual_review",
+    "codes": [
+      "BANK_COLLISION"
+    ]
+  },
+  "settings": {}
+}

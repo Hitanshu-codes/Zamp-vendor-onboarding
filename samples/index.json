@@ -1,0 +1,170 @@
+[
+  {
+    "id": "S0",
+    "title": "Happy path",
+    "expected": {
+      "status": "approved",
+      "route": "none",
+      "codes": []
+    }
+  },
+  {
+    "id": "S1",
+    "title": "Wrong document in the tax slot",
+    "expected": {
+      "status": "pending",
+      "route": "vendor_followup",
+      "codes": [
+        "DOC_WRONG_TYPE"
+      ]
+    }
+  },
+  {
+    "id": "S2",
+    "title": "Bank account in a director's name",
+    "expected": {
+      "status": "pending",
+      "route": "vendor_followup",
+      "codes": [
+        "BANK_HOLDER_NOT_COMPANY"
+      ]
+    }
+  },
+  {
+    "id": "S3",
+    "title": "Bank account belongs to another vendor",
+    "expected": {
+      "status": "pending",
+      "route": "manual_review",
+      "codes": [
+        "BANK_COLLISION"
+      ]
+    }
+  },
+  {
+    "id": "S4a",
+    "title": "First-seen country (USA): rule learned by web search",
+    "expected": {
+      "status": "approved",
+      "route": "none",
+      "codes": []
+    }
+  },
+  {
+    "id": "S4b",
+    "title": "Same country again: registry cache hit",
+    "expected": {
+      "status": "approved",
+      "route": "none",
+      "codes": []
+    }
+  },
+  {
+    "id": "S4c",
+    "title": "ID fails the provisional rule",
+    "expected": {
+      "status": "pending",
+      "route": "manual_review",
+      "codes": [
+        "RULE_PROVISIONAL_MISMATCH"
+      ]
+    }
+  },
+  {
+    "id": "S5a",
+    "title": "Injection: visible instruction in a document",
+    "expected": {
+      "status": "pending",
+      "route": "manual_review",
+      "codes": [
+        "INJECTION_DETECTED"
+      ]
+    }
+  },
+  {
+    "id": "S5b",
+    "title": "Injection: hidden white 1pt text",
+    "expected": {
+      "status": "pending",
+      "route": "manual_review",
+      "codes": [
+        "INJECTION_DETECTED"
+      ]
+    }
+  },
+  {
+    "id": "S5c",
+    "title": "Injection: instruction inside the company name field",
+    "expected": {
+      "status": "pending",
+      "route": "manual_review",
+      "codes": [
+        "INJECTION_DETECTED"
+      ]
+    }
+  },
+  {
+    "id": "S6a",
+    "title": "Sanctions: exact match",
+    "expected": {
+      "status": "rejected",
+      "route": "none",
+      "codes": [
+        "SANCTIONS_EXACT"
+      ]
+    }
+  },
+  {
+    "id": "S6b",
+    "title": "Sanctions: near match",
+    "expected": {
+      "status": "pending",
+      "route": "manual_review",
+      "codes": [
+        "SANCTIONS_FUZZY"
+      ]
+    }
+  },
+  {
+    "id": "S6c",
+    "title": "Watchlist: new name, blocked bank account",
+    "expected": {
+      "status": "rejected",
+      "route": "none",
+      "codes": [
+        "WATCHLIST_BLOCKED"
+      ]
+    }
+  },
+  {
+    "id": "S6d",
+    "title": "Watchlist: high-severity email domain",
+    "expected": {
+      "status": "pending",
+      "route": "manual_review",
+      "codes": [
+        "WATCHLIST_HIGH"
+      ]
+    }
+  },
+  {
+    "id": "S7a",
+    "title": "Resubmission fixes the wrong document (run S1 first)",
+    "expected": {
+      "status": "approved",
+      "route": "none",
+      "codes": []
+    }
+  },
+  {
+    "id": "S7b",
+    "title": "Resubmission also changes the bank account (run S1 first)",
+    "expected": {
+      "status": "pending",
+      "route": "manual_review",
+      "codes": [
+        "UNREQUESTED_CHANGE"
+      ]
+    }
+  }
+]

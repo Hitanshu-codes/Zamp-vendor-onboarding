@@ -1,0 +1,29 @@
+{
+  "task": "name_adjudication",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "NameAdjudication",
+  "key": "b071ae6b3022af3ec8c742a7667442088b69ea0306dedfc051639b1fa48772ea",
+  "output_text": "{\n  \"same_entity\": \"no\",\n  \"reasons\": [\n    \"The names differ in descriptive words ('Industries' versus 'Industrial'), which means they do not refer to the same legal entity.\"\n  ]\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0Tc1Vyg4a4f4egMGaHIOzm16JWfnkSh6ws53XVpgOLohN76gtVPzO8xtW/w8oi464ruewzImRHoyFMFqnfVoaMoLcDVKNXZHZWUXBQJp4ye9D09Y9jBHQ5bxs=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"same_entity\": \"no\",\n  \"reasons\": [\n    \"The names differ in descriptive words ('Industries' versus 'Industrial'), which means they do not refer to the same legal entity.\"\n  ]\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 221,
+    "total_output_tokens": 52,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 2020
+}

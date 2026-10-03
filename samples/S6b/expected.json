@@ -1,0 +1,13 @@
+{
+  "id": "S6b",
+  "title": "Sanctions: near match",
+  "notes": "",
+  "expected": {
+    "status": "pending",
+    "route": "manual_review",
+    "codes": [
+      "SANCTIONS_FUZZY"
+    ]
+  },
+  "settings": {}
+}

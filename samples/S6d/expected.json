@@ -1,0 +1,13 @@
+{
+  "id": "S6d",
+  "title": "Watchlist: high-severity email domain",
+  "notes": "",
+  "expected": {
+    "status": "pending",
+    "route": "manual_review",
+    "codes": [
+      "WATCHLIST_HIGH"
+    ]
+  },
+  "settings": {}
+}

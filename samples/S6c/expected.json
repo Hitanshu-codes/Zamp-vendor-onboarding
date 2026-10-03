@@ -1,0 +1,13 @@
+{
+  "id": "S6c",
+  "title": "Watchlist: new name, blocked bank account",
+  "notes": "",
+  "expected": {
+    "status": "rejected",
+    "route": "none",
+    "codes": [
+      "WATCHLIST_BLOCKED"
+    ]
+  },
+  "settings": {}
+}

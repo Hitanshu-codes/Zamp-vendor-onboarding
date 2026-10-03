@@ -1,0 +1,11 @@
+{
+  "id": "S4a",
+  "title": "First-seen country (USA): rule learned by web search",
+  "notes": "Registry has no US rule, so the run searches, self-tests and stores a provisional EIN rule.",
+  "expected": {
+    "status": "approved",
+    "route": "none",
+    "codes": []
+  },
+  "settings": {}
+}

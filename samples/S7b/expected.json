@@ -1,0 +1,23 @@
+{
+  "id": "S7b",
+  "title": "Resubmission also changes the bank account (run S1 first)",
+  "notes": "",
+  "expected": {
+    "status": "pending",
+    "route": "manual_review",
+    "codes": [
+      "UNREQUESTED_CHANGE"
+    ]
+  },
+  "settings": {},
+  "resubmission": {
+    "replace_docs": [
+      "tax_cert",
+      "bank_letter"
+    ],
+    "form_changes": {
+      "bank_account_number": "50100999888777"
+    },
+    "base_scenario": "S1"
+  }
+}

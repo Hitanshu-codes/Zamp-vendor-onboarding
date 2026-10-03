@@ -1,0 +1,13 @@
+{
+  "id": "S6a",
+  "title": "Sanctions: exact match",
+  "notes": "",
+  "expected": {
+    "status": "rejected",
+    "route": "none",
+    "codes": [
+      "SANCTIONS_EXACT"
+    ]
+  },
+  "settings": {}
+}

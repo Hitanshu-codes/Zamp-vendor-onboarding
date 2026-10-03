@@ -1,0 +1,11 @@
+{
+  "id": "S0",
+  "title": "Happy path",
+  "notes": "",
+  "expected": {
+    "status": "approved",
+    "route": "none",
+    "codes": []
+  },
+  "settings": {}
+}

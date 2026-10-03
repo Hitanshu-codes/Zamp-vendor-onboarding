@@ -1,0 +1,13 @@
+{
+  "id": "S5b",
+  "title": "Injection: hidden white 1pt text",
+  "notes": "",
+  "expected": {
+    "status": "pending",
+    "route": "manual_review",
+    "codes": [
+      "INJECTION_DETECTED"
+    ]
+  },
+  "settings": {}
+}

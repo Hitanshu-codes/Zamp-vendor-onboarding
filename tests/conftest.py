@@ -8,6 +8,10 @@ os.environ["DATA_DIR"] = str(_TMP)
 os.environ["DEMO_PASSWORD"] = ""
 os.environ["LLM_MODE"] = "replay"
 os.environ["EMAIL_PROVIDER"] = "outbox"
+# Tests never make paid API calls: blank keys win over .env (python-dotenv does not override set vars).
+os.environ["GEMINI_API_KEY"] = ""
+os.environ["GOOGLE_API_KEY"] = ""
+os.environ["RESEND_API_KEY"] = ""
 
 import pytest  # noqa: E402
 

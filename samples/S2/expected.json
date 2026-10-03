@@ -1,0 +1,13 @@
+{
+  "id": "S2",
+  "title": "Bank account in a director's name",
+  "notes": "",
+  "expected": {
+    "status": "pending",
+    "route": "vendor_followup",
+    "codes": [
+      "BANK_HOLDER_NOT_COMPANY"
+    ]
+  },
+  "settings": {}
+}

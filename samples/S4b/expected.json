@@ -1,0 +1,11 @@
+{
+  "id": "S4b",
+  "title": "Same country again: registry cache hit",
+  "notes": "Run after S4a. The EIN rule is reused; no search.",
+  "expected": {
+    "status": "approved",
+    "route": "none",
+    "codes": []
+  },
+  "settings": {}
+}

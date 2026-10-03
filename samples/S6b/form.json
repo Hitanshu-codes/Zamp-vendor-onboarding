@@ -1,0 +1,16 @@
+{
+  "legal_name": "Volkov Meridian Shipping Limited",
+  "trade_name": "",
+  "country": "GB",
+  "entity_type": "company",
+  "registered_address": "Unit 4, Riverside Park, Leeds LS11 5DF, United Kingdom",
+  "contact_name": "Harriet Lowe",
+  "contact_email": "finance@volkov.example",
+  "tax_id": "GB135792468",
+  "tax_id_type": "VAT",
+  "bank_account_holder": "Volkov Meridian Shipping Limited",
+  "bank_account_number": "",
+  "iban": "GB85NGBK40112233778899",
+  "bank_code": "NGBKGB2L",
+  "vendor_category": "goods"
+}

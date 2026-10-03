@@ -1,0 +1,16 @@
+{
+  "legal_name": "Brightwater Analytics Inc",
+  "trade_name": "",
+  "country": "US",
+  "entity_type": "company",
+  "registered_address": "1200 Lamar Blvd, Suite 400, Austin, TX 78703, USA",
+  "contact_name": "Dana Whitfield",
+  "contact_email": "ap@brightwater.example",
+  "tax_id": "47-2918365",
+  "tax_id_type": "EIN",
+  "bank_account_holder": "Brightwater Analytics Inc",
+  "bank_account_number": "4401987362",
+  "iban": "",
+  "bank_code": "123456780",
+  "vendor_category": "goods"
+}
