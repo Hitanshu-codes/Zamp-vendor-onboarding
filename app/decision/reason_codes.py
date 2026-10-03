@@ -46,6 +46,8 @@ _CODES = [
     ReasonCode("BANK_CHANGE_REQUEST", "escalate", "An approved vendor asked to change bank details.", suspicious=True),
     ReasonCode("ENTITY_TYPE_UNCLEAR", "escalate", "Signals contradict the declared entity type."),
     ReasonCode("TAXID_INCONSISTENT", "escalate", "Tax identifiers on the form and documents contradict each other (e.g. GSTIN vs PAN).", suspicious=True),
+    ReasonCode("BANK_DETAILS_MISMATCH", "escalate", "The account on the form differs from the account on the bank document.", suspicious=True),
+    ReasonCode("COUNTRY_MISMATCH", "escalate", "The country on the form, documents and address do not agree.", suspicious=True),
     ReasonCode("CHECK_MISSING", "escalate", "A required check did not produce a passing result; a missing check is never treated as a pass."),
     # reject
     ReasonCode("SANCTIONS_EXACT", "reject", "Exact match on the sanctions list.", suspicious=True),

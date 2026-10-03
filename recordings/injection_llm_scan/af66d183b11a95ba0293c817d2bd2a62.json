@@ -1,0 +1,29 @@
+{
+  "task": "injection_llm_scan",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "InjectionScan",
+  "key": "af66d183b11a95ba0293c817d2bd2a62dec891166540c677f5d40aec3e7b1506",
+  "output_text": "{\n  \"contains_instructions\": false,\n  \"quote_start\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0TXF5IPt/Axlv1jn8ZofHBR645LfxSGnhfA1ZmE9IwRQNk3QKqOZajwoN+8D7ZfNsmun0zzzx0AlNhQ6arzODzqsv/HKjiVWFP9H0VOBJ5jGzG+RLeOPvhizY=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"contains_instructions\": false,\n  \"quote_start\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 955,
+    "total_output_tokens": 20,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 1430
+}

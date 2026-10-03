@@ -1,0 +1,15 @@
+Subject: Action needed to complete your vendor registration
+
+Dear {{ contact_name or "vendor" }},
+
+Thank you for registering {{ company or "your company" }} as a vendor. To finish your registration we need the following:
+
+{% for item in items %}  [ ] {{ item }}
+{% endfor %}
+Please make these updates by {{ due_date }} using your secure link:
+{{ resubmit_url }}
+
+You only need to change the items listed above; everything else you sent has been checked and is fine.
+
+Kind regards,
+Vendor Onboarding Team

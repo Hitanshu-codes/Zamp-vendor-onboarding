@@ -1,0 +1,24 @@
+Subject: [Internal] Review case #{{ case_id }}: submission #{{ submission_id }} ({{ status }} / {{ route }})
+
+INTERNAL - not for vendors.
+
+Submission: #{{ submission_id }}, version {{ version_no }}, run #{{ run_id }}
+Vendor (as submitted): {{ vendor_name }}
+Country: {{ country }}   Entity type: {{ entity_type }}
+Decision: {{ status }} / {{ route }}   Risk points: {{ risk_points }}
+Priority: {{ priority }}
+
+Why this needs a person:
+{% for t in triggered %}  - {{ t.code }} ({{ t.severity }}) from check "{{ t.check }}"
+{% endfor %}
+Rationale: {{ rationale }}
+
+Failed and warning checks:
+{% for c in problem_checks %}  * {{ c.check }} [{{ c.result }}{% if c.reason_code %}, {{ c.reason_code }}{% endif %}]: {{ c.explanation }}
+{% endfor %}
+{% if fixable_items %}
+Fixable items the vendor could be asked about (not sent automatically because manual review takes precedence):
+{% for item in fixable_items %}  - {{ item }}
+{% endfor %}{% endif %}
+Open the case: {{ case_url }}
+Full run: {{ run_url }}

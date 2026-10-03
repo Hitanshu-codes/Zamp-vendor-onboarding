@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Email #{{ email.id }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="eyebrow">{{ "Vendor-facing" if email.audience == "vendor" else "Internal (never sent)" }} · {{ email.kind|replace('_', ' ') }} · submission #{{ email.submission_id }}</p>
+    <h1>{{ email.subject }}</h1>
+  </div>
+  {% if email.run_id %}<a class="btn" href="/runs/{{ email.run_id }}">Back to run</a>{% endif %}
+</div>
+<div class="card">
+  <dl class="kv">
+    <dt>To</dt><dd>{{ email.to }}</dd>
+    <dt>Status</dt><dd>{{ email.status|replace('_', ' ') }}{% if email.provider %} via {{ email.provider }}{% endif %}{% if email.delivered_to and email.delivered_to != email.to %} (delivered to {{ email.delivered_to }}){% endif %}</dd>
+    {% if email.error %}<dt>Delivery error</dt><dd class="text-bad">{{ email.error }}</dd>{% endif %}
+    <dt>Reason codes</dt><dd>{% for c in codes %}<span class="chip">{{ c }}</span> {% else %}<span class="muted">none</span>{% endfor %}</dd>
+    <dt>Created</dt><dd>{{ email.created_at }}</dd>
+  </dl>
+</div>
+<div class="card"><pre class="email-body">{{ email.body }}</pre></div>
+{% endblock %}

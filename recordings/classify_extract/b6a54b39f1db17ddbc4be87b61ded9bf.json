@@ -1,0 +1,29 @@
+{
+  "task": "classify_extract",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "DocumentExtraction",
+  "key": "b6a54b39f1db17ddbc4be87b61ded9bfa4fbe94772c10eb8a0850319307395d8",
+  "output_text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"Unit 12, Shree Industrial Estate, Andheri East, Mumbai 400069, Maharashtra, India\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"IN\",\n  \"directors_or_owners\": [\n    \"Meera Kulkarni\",\n    \"Arjun Patil\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Tidewater Exports Private Limited\",\n  \"notes\": null,\n  \"registration_date\": \"2018-09-01\",\n  \"secondary_tax_id\": \"AAQCT8825P\",\n  \"tax_id\": \"24AAQCT8825P1ZD\",\n  \"tax_id_type\": \"GSTIN\",\n  \"trade_name\": \"Tidewater Exports Private Limited\",\n  \"translation_of_key_fields\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0Tln57ccGuGAfs1xQCmfbSWJsBMBSDCjcwET1unvYdy/29e1876DtmfK4lj6NkN+6it2gLR2AwaRfoTO8NijDB8mVzjQxNu71Qq0owCRLP3C8xZs7ljtRL3LI=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"Unit 12, Shree Industrial Estate, Andheri East, Mumbai 400069, Maharashtra, India\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"IN\",\n  \"directors_or_owners\": [\n    \"Meera Kulkarni\",\n    \"Arjun Patil\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Tidewater Exports Private Limited\",\n  \"notes\": null,\n  \"registration_date\": \"2018-09-01\",\n  \"secondary_tax_id\": \"AAQCT8825P\",\n  \"tax_id\": \"24AAQCT8825P1ZD\",\n  \"tax_id_type\": \"GSTIN\",\n  \"trade_name\": \"Tidewater Exports Private Limited\",\n  \"translation_of_key_fields\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 793,
+    "total_output_tokens": 326,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 3198
+}

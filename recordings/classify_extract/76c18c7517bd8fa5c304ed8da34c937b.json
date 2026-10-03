@@ -6,7 +6,7 @@
   "output_text": "{\n  \"doc_type\": \"bank_letter_or_cheque\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": \"Evergreen Fabrication Private Limited\",\n  \"account_number\": \"50100234567890\",\n  \"account_type\": \"current\",\n  \"address\": null,\n  \"bank_code\": \"HDFC0002741\",\n  \"bank_name\": \"HDFC Bank\",\n  \"country\": \"IN\",\n  \"directors_or_owners\": [],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": \"2026-09-15\",\n  \"language\": \"en\",\n  \"legal_name\": null,\n  \"notes\": null,\n  \"registration_date\": null,\n  \"secondary_tax_id\": null,\n  \"tax_id\": null,\n  \"tax_id_type\": null,\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
   "steps": [
     {
-      "signature": "EmAKXgFpFH0TfQ7FBrNlUwgPOCDVI8TeCobRcz8eztofkDJjglicWejp//SfMDIfuVzGF0oWvSup+VE0Xydx3MqxNetudD3wejtQtfH2XRrM2X34lPw6ggzBrzO4Awrk6P4=",
+      "signature": "EmAKXgFpFH0T8oTz4cLqVjjTMCPzpnY0Ibo+oUJ2mB6WQT0L3j1TWZWqiV29vq+8K9ckE8i1Jk9Fzvxtv+/nv2rFCZKXWqt+6Z3JWVDvWruWeq1D7JFZZZeoJvHxgLUAOkU=",
       "type": "thought"
     },
     {
@@ -25,5 +25,5 @@
     "total_thought_tokens": 0,
     "total_tool_use_tokens": 0
   },
-  "latency_ms": 3154
+  "latency_ms": 2608
 }

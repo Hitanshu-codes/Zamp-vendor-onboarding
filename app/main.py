@@ -9,7 +9,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app import db, demo
 from app.security.auth import AuthMiddleware
-from app.web import api, pages
+from app.web import api, pages, runs
 
 STATIC_DIR = Path(__file__).resolve().parent / "web" / "static"
 
@@ -24,6 +24,7 @@ app = FastAPI(title="Vendor Onboarding", lifespan=lifespan, docs_url=None, redoc
 app.add_middleware(AuthMiddleware)
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 app.include_router(pages.router)
+app.include_router(runs.router)
 app.include_router(api.router)
 
 

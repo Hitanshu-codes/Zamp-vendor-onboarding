@@ -1,6 +1,6 @@
 {
   "id": "S7a",
-  "title": "Resubmission fixes the wrong document (run S1 first)",
+  "title": "Resubmission fixes the wrong document",
   "notes": "",
   "expected": {
     "status": "approved",
@@ -12,7 +12,6 @@
     "replace_docs": [
       "tax_cert"
     ],
-    "form_changes": {},
-    "base_scenario": "S1"
+    "form_changes": {}
   }
 }

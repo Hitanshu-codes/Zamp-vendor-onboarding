@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Run #{{ run.id }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="eyebrow">Submission #{{ sub.id }} · version {{ version.version_no }} · {{ run.trigger|replace('_', ' ') }} run #{{ run.id }}</p>
+    <h1>{{ form.legal_name or "Unnamed vendor" }}</h1>
+    <p>{{ country_name }} · {{ (form.entity_type or "")|replace('_', ' ') }} · tax ID <code>{{ form.tax_id }}</code></p>
+  </div>
+  {% if other_runs|length > 1 %}
+  <nav class="run-history" aria-label="Runs for this submission">
+    {% for r in other_runs %}
+      <a href="/runs/{{ r.id }}" class="chip{% if r.id == run.id %} chip-active{% endif %}" {% if r.id == run.id %}aria-current="page"{% endif %}>v{{ r.version_no }} · {{ r.trigger|replace('_', ' ') }}</a>
+    {% endfor %}
+  </nav>
+  {% endif %}
+</div>
+
+<div class="run-layout" id="run" data-run-id="{{ run.id }}" data-finished="{{ 'true' if run.finished_at else 'false' }}">
+  <ol class="stepper" id="stepper">
+    {% for s in stages %}
+    <li class="step" id="stage-{{ s.key }}" data-state="waiting">
+      <button class="step-head" type="button" aria-expanded="false" aria-controls="stage-body-{{ s.key }}">
+        <span class="step-dot" aria-hidden="true"></span>
+        <span class="step-text">
+          <span class="step-title">{{ loop.index }}. {{ s.label }}</span>
+          <span class="step-summary">{{ s.description }}</span>
+        </span>
+        <span class="step-meta"><span class="step-state">Waiting</span><span class="step-time"></span></span>
+      </button>
+      <div class="step-body" id="stage-body-{{ s.key }}" hidden></div>
+    </li>
+    {% endfor %}
+  </ol>
+
+  <aside class="decision-panel" id="decision" aria-live="polite">
+    <div class="card decision-card">
+      <h2>Decision</h2>
+      <div id="decision-body"><p class="muted" id="decision-wait"><span class="spinner" aria-hidden="true"></span> Waiting for all checks to finish…</p></div>
+    </div>
+    <p class="hint conn" id="conn-status"></p>
+  </aside>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/run.js" defer></script>{% endblock %}

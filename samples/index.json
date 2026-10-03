@@ -149,7 +149,7 @@
   },
   {
     "id": "S7a",
-    "title": "Resubmission fixes the wrong document (run S1 first)",
+    "title": "Resubmission fixes the wrong document",
     "expected": {
       "status": "approved",
       "route": "none",
@@ -158,7 +158,7 @@
   },
   {
     "id": "S7b",
-    "title": "Resubmission also changes the bank account (run S1 first)",
+    "title": "Resubmission also changes the bank account",
     "expected": {
       "status": "pending",
       "route": "manual_review",

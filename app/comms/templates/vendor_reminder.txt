@@ -1,0 +1,13 @@
+Subject: Reminder: action needed on your vendor registration
+
+Dear {{ contact_name or "vendor" }},
+
+This is a friendly reminder that we are still waiting for the following to complete the registration of {{ company or "your company" }}:
+
+{% for item in items %}  [ ] {{ item }}
+{% endfor %}
+Please update your submission by {{ due_date }}:
+{{ resubmit_url }}
+
+Kind regards,
+Vendor Onboarding Team

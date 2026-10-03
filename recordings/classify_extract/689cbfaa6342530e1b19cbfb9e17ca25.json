@@ -1,0 +1,29 @@
+{
+  "task": "classify_extract",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "DocumentExtraction",
+  "key": "689cbfaa6342530e1b19cbfb9e17ca25d83ccee25c0ae8d6a59db9d1c9188730",
+  "output_text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"Unit 4, Riverside Park, Leeds LS11 5DF, United Kingdom\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"GB\",\n  \"directors_or_owners\": [\n    \"Harriet Lowe\",\n    \"Samuel Okafor\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Volkov Meridian Shipping Limited\",\n  \"notes\": null,\n  \"registration_date\": \"2017-05-02\",\n  \"secondary_tax_id\": null,\n  \"tax_id\": \"GB135792468\",\n  \"tax_id_type\": \"VAT\",\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0T04vC+/MCOjnFwTBpCXE2BKQw3Tz7cQ/zM+Wm6kc4aIxNrrgOWVCotm49192lRlu2uzrSXF+zSYCAo98QsqRnBO6BFainigOBL0AEFMEzyqGyqXXIPRtOILU=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"Unit 4, Riverside Park, Leeds LS11 5DF, United Kingdom\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"GB\",\n  \"directors_or_owners\": [\n    \"Harriet Lowe\",\n    \"Samuel Okafor\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Volkov Meridian Shipping Limited\",\n  \"notes\": null,\n  \"registration_date\": \"2017-05-02\",\n  \"secondary_tax_id\": null,\n  \"tax_id\": \"GB135792468\",\n  \"tax_id_type\": \"VAT\",\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 793,
+    "total_output_tokens": 298,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 3720
+}

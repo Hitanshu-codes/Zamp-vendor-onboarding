@@ -5,6 +5,7 @@
       "name": "app",
       "runtimeExecutable": ".venv/Scripts/python.exe",
       "runtimeArgs": ["-m", "uvicorn", "app.main:app", "--port", "8000"],
+      "env": { "DEMO_PASSWORD": "", "DATA_DIR": "./data-preview" },
       "port": 8000
     }
   ]

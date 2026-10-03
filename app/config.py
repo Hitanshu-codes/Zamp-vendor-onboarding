@@ -35,6 +35,7 @@ class Config:
     email_from: str = field(default_factory=lambda: _str("EMAIL_FROM", "Vendor Onboarding <onboarding@resend.dev>"))
     email_redirect_to: str = field(default_factory=lambda: _str("EMAIL_REDIRECT_TO"))
 
+    public_base_url: str = field(default_factory=lambda: _str("PUBLIC_BASE_URL", "http://localhost:8000"))
     data_dir: Path = field(default_factory=lambda: Path(_str("DATA_DIR", str(ROOT / "data"))))
     demo_password: str = field(default_factory=lambda: _str("DEMO_PASSWORD"))
     session_secret: str = field(default_factory=lambda: _str("SESSION_SECRET"))

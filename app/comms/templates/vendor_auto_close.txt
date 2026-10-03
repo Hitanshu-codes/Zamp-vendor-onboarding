@@ -1,0 +1,8 @@
+Subject: Your vendor registration has been closed
+
+Dear {{ contact_name or "vendor" }},
+
+We did not receive the requested updates, so we have closed this registration. You are welcome to start a new registration at any time.
+
+Kind regards,
+Vendor Onboarding Team

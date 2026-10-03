@@ -29,9 +29,11 @@ def decide(results: list[CheckResult], flags: DecisionFlags) -> Decision:
     # A required check counts only if it is present and passed. Anything else is a failure.
     passed_checks = {r.check for r in results if r.result == "pass"}
     blocking_checks = {r.check for r in results if r.result == "fail"}
+    # A check skipped because another check failed is covered by that failure, but only if it really failed.
+    covered = {r.check for r in results if r.result == "skipped" and r.blocked_by in blocking_checks}
     missing_required = [c for c in flags.required_checks if c not in passed_checks]
     for check in missing_required:
-        if check not in blocking_checks:  # absent, skipped, or warned without a blocking code
+        if check not in blocking_checks and check not in covered:  # absent, skipped, or warned without a blocking code
             triggered.append(TriggeredCode(code="CHECK_MISSING", severity="escalate", check=check))
 
     if flags.injection_flag and not any(t.code == "INJECTION_DETECTED" for t in triggered):

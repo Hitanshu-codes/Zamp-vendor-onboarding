@@ -1,0 +1,8 @@
+Subject: Your vendor registration is approved
+
+Dear {{ contact_name or "vendor" }},
+
+Good news: {{ company or "your company" }} has been approved as a vendor. Our accounts team will be in touch about purchase orders and invoicing.
+
+Kind regards,
+Vendor Onboarding Team

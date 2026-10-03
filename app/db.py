@@ -111,6 +111,8 @@ CREATE TABLE IF NOT EXISTS check_results (
     evidence_json TEXT NOT NULL DEFAULT '{}',
     explanation TEXT NOT NULL,
     inputs_hash TEXT,
+    blocked_by TEXT,
+    required INTEGER NOT NULL DEFAULT 0,
     reused_from_run_id INTEGER
 );
 CREATE INDEX IF NOT EXISTS ix_checks_run ON check_results(run_id);

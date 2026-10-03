@@ -1,0 +1,29 @@
+{
+  "task": "classify_extract",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "DocumentExtraction",
+  "key": "c68581b53d289799facb7fb06e47fec4a504f1175efdaa4ed8d4470aa1fed122",
+  "output_text": "{\n  \"doc_type\": \"incorporation_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"Unit 4, Riverside Park, Leeds LS11 5DF, United Kingdom\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"GB\",\n  \"directors_or_owners\": [\n    \"Harriet Lowe\",\n    \"Samuel Okafor\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": \"2017-03-20\",\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Pale Harbor Logistics Ltd\",\n  \"notes\": null,\n  \"registration_date\": null,\n  \"secondary_tax_id\": null,\n  \"tax_id\": \"13579246\",\n  \"tax_id_type\": null,\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0TNlav4ZbirV+W+tMdz95jzKg9wFJNxSZK45D6rHQPjcpwu1lC918OGYxdmBTGyuKCbvXPm2ndbu3OVwmS0c4P/F4oNO09WwgFoe7qHz4gCXu8FvXzbuKWIYA=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"doc_type\": \"incorporation_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"Unit 4, Riverside Park, Leeds LS11 5DF, United Kingdom\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"GB\",\n  \"directors_or_owners\": [\n    \"Harriet Lowe\",\n    \"Samuel Okafor\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": \"2017-03-20\",\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Pale Harbor Logistics Ltd\",\n  \"notes\": null,\n  \"registration_date\": null,\n  \"secondary_tax_id\": null,\n  \"tax_id\": \"13579246\",\n  \"tax_id_type\": null,\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 793,
+    "total_output_tokens": 293,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 2878
+}

@@ -4,14 +4,80 @@
 <div class="page-head">
   <div>
     <h1>New vendor submission</h1>
-    <p>Fill in the vendor form and attach the three documents. Every check and its reasoning will be shown as it runs.</p>
+    <p>Fill in the vendor form and attach the three documents. Every check and its reasoning is shown live as it runs.</p>
   </div>
 </div>
-<div class="card">
-  <div class="empty">
-    <div class="icon" aria-hidden="true">○</div>
-    <h2>Submission form arrives in the pipeline phase</h2>
-    <p>The form, sample scenarios and the live run view are built in P4.</p>
+
+{% if error %}<div class="notice bad" role="alert">{{ error }}</div>{% endif %}
+
+<div class="card sample-bar">
+  <div class="field" style="margin:0;flex:1;min-width:240px">
+    <label for="sample">Load sample scenario</label>
+    <select id="sample">
+      <option value="">Choose a scenario to pre-fill the form and attach its PDFs…</option>
+      {% for s in samples %}
+      <option value="{{ s.id }}">{{ s.id }} · {{ s.title }}{% if not evaluator_view %} → expected {{ s.expected.status }}{% if s.expected.route != "none" %} / {{ s.expected.route|replace('_', ' ') }}{% endif %}{% endif %}</option>
+      {% endfor %}
+    </select>
   </div>
+  <p class="hint" id="sample-note" aria-live="polite" style="flex:2;min-width:240px;margin:0"></p>
 </div>
+
+<form method="post" action="/submit" enctype="multipart/form-data" id="submit-form" class="grid-2 submit-grid">
+  <div class="card">
+    <h2>Company</h2>
+    <div class="field"><label for="legal_name">Legal name</label><input id="legal_name" name="legal_name" type="text" required></div>
+    <div class="field"><label for="trade_name">Trade name <span class="muted">(optional)</span></label><input id="trade_name" name="trade_name" type="text"></div>
+    <div class="row">
+      <div class="field" style="flex:1"><label for="country">Country of registration</label>
+        <select id="country" name="country" required><option value="">Select…</option>
+          {% for code, name in countries.items() %}<option value="{{ code }}">{{ name }}</option>{% endfor %}</select></div>
+      <div class="field" style="flex:1"><label for="entity_type">Entity type</label>
+        <select id="entity_type" name="entity_type" required><option value="">Select…</option>
+          {% for k, v in entity_types.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></div>
+    </div>
+    <div class="field"><label for="registered_address">Registered address</label><textarea id="registered_address" name="registered_address" rows="2" required></textarea></div>
+    <div class="row">
+      <div class="field" style="flex:2"><label for="tax_id">Tax ID</label><input id="tax_id" name="tax_id" type="text" required autocomplete="off"></div>
+      <div class="field" style="flex:1"><label for="tax_id_type">Type <span class="muted">(optional)</span></label><input id="tax_id_type" name="tax_id_type" type="text" placeholder="GSTIN, EIN, VAT…"></div>
+    </div>
+    <div class="field"><label for="vendor_category">Vendor category</label>
+      <select id="vendor_category" name="vendor_category" required>{% for k, v in categories.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></div>
+    <h2 style="margin-top:20px">Contact</h2>
+    <div class="row">
+      <div class="field" style="flex:1"><label for="contact_name">Contact name</label><input id="contact_name" name="contact_name" type="text" required></div>
+      <div class="field" style="flex:1"><label for="contact_email">Contact email</label><input id="contact_email" name="contact_email" type="email" required></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <h2>Bank details</h2>
+      <div class="field"><label for="bank_account_holder">Account holder name</label><input id="bank_account_holder" name="bank_account_holder" type="text" required></div>
+      <div class="row">
+        <div class="field" style="flex:1"><label for="bank_account_number">Account number</label><input id="bank_account_number" name="bank_account_number" type="text" autocomplete="off"></div>
+        <div class="field" style="flex:1"><label for="iban">or IBAN</label><input id="iban" name="iban" type="text" autocomplete="off"></div>
+      </div>
+      <div class="field"><label for="bank_code">Bank code</label><input id="bank_code" name="bank_code" type="text" placeholder="IFSC, SWIFT/BIC or ABA routing" required autocomplete="off"></div>
+    </div>
+
+    <div class="card">
+      <h2>Documents</h2>
+      <p class="hint" style="margin-top:-6px">PDF, PNG or JPEG, up to {{ max_mb }} MB and 10 pages each. Files are classified by their content, never by file name.</p>
+      {% for slot, label in slots %}
+      <label class="dropzone" for="{{ slot }}" data-slot="{{ slot }}">
+        <input id="{{ slot }}" name="{{ slot }}" type="file" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">
+        <span class="dz-title">{{ label|capitalize }}{% if slot == "incorporation_cert" %} <span class="muted">(not needed for sole proprietors)</span>{% endif %}</span>
+        <span class="dz-file" data-empty="Drop a file here or click to choose">Drop a file here or click to choose</span>
+      </label>
+      {% endfor %}
+    </div>
+
+    <div class="submit-actions">
+      <button class="btn primary btn-lg" type="submit" id="run-btn">Run onboarding</button>
+      <span class="hint">You'll be taken to the live run view.</span>
+    </div>
+  </div>
+</form>
 {% endblock %}
+{% block scripts %}<script src="/static/submit.js" defer></script>{% endblock %}

@@ -1,0 +1,29 @@
+{
+  "task": "classify_extract",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "DocumentExtraction",
+  "key": "a6dc62271ecdf038292319e2b485709c2dc93d4e90c87f21604b731882ee8560",
+  "output_text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": true,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"Unit 12, Shree Industrial Estate, Andheri East, Mumbai 400069, Maharashtra, India\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"IN\",\n  \"directors_or_owners\": [\n    \"Meera Kulkarni\",\n    \"Arjun Patil\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Larkspur Interiors Private Limited\",\n  \"notes\": null,\n  \"registration_date\": \"2018-09-01\",\n  \"secondary_tax_id\": \"AALCL4471H\",\n  \"tax_id\": \"27AALCL4471H1Z7\",\n  \"tax_id_type\": \"GSTIN\",\n  \"trade_name\": \"Larkspur Interiors Private Limited\",\n  \"translation_of_key_fields\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0TIs4or7GtSIA9hMdYYiuWtmPK6+LluUEubnNECwgqzXI/OaVzz7CWfpfsnAnv0Sh75UfNIxbfP+fo9jxjOOfnsW8T53dj2S9JMnMezH9Aw7mVvqDQQ248pyQ=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": true,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"Unit 12, Shree Industrial Estate, Andheri East, Mumbai 400069, Maharashtra, India\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"IN\",\n  \"directors_or_owners\": [\n    \"Meera Kulkarni\",\n    \"Arjun Patil\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Larkspur Interiors Private Limited\",\n  \"notes\": null,\n  \"registration_date\": \"2018-09-01\",\n  \"secondary_tax_id\": \"AALCL4471H\",\n  \"tax_id\": \"27AALCL4471H1Z7\",\n  \"tax_id_type\": \"GSTIN\",\n  \"trade_name\": \"Larkspur Interiors Private Limited\",\n  \"translation_of_key_fields\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 793,
+    "total_output_tokens": 327,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 3522
+}

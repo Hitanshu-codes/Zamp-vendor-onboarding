@@ -48,11 +48,6 @@ def logout():
 
 # --- main sections (filled in by later phases) ---------------------------------
 
-@router.get("/submit")
-def submit_page(request: Request):
-    return page(request, "submit.html", "submit")
-
-
 @router.get("/dashboard")
 def dashboard(request: Request):
     return page(request, "placeholder.html", "dashboard", title="Dashboard",

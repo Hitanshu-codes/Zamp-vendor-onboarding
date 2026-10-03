@@ -317,14 +317,14 @@ def scenarios() -> dict[str, dict[str, Any]]:
                 contact_email="accounts@sunmark-exports.example")
     add("S6d", "Watchlist: high-severity email domain", p6d, {"status": "pending", "route": "manual_review", "codes": ["WATCHLIST_HIGH"]})
 
-    add("S7a", "Resubmission fixes the wrong document (run S1 first)", p1,
+    add("S7a", "Resubmission fixes the wrong document", p1,
         {"status": "approved", "route": "none", "codes": []}, docs={"tax_cert": ("utility_bill", None)},
         resubmission={"replace_docs": ["tax_cert"], "form_changes": {}})
-    p7b_new = replace(p1, account="50100999888777")
-    add("S7b", "Resubmission also changes the bank account (run S1 first)", p1,
+    p7b = india("Juniper Cartons Private Limited", "AARCJ9936R", account="50100765432109", bank_code="HDFC0007754")
+    add("S7b", "Resubmission also changes the bank account", p7b,
         {"status": "pending", "route": "manual_review", "codes": ["UNREQUESTED_CHANGE"]}, docs={"tax_cert": ("utility_bill", None)},
-        resubmission={"replace_docs": ["tax_cert", "bank_letter"], "form_changes": {"bank_account_number": p7b_new.account},
-                      "profile_overrides": {"account": p7b_new.account}})
+        resubmission={"replace_docs": ["tax_cert", "bank_letter"], "form_changes": {"bank_account_number": "50100999888777"},
+                      "profile_overrides": {"account": "50100999888777"}})
     return s
 
 
@@ -360,7 +360,7 @@ def main() -> None:
             v2 = build_docs(new_profile, {})
             for slot in r["replace_docs"]:
                 (folder / f"{slot}_v2.pdf").write_bytes(v2[slot])
-            meta["resubmission"] = {"replace_docs": r["replace_docs"], "form_changes": r["form_changes"], "base_scenario": "S1"}
+            meta["resubmission"] = {"replace_docs": r["replace_docs"], "form_changes": r["form_changes"]}
         (folder / "expected.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
         index.append({"id": sid, "title": sc["title"], "expected": sc["expected"]})
     (SAMPLES / "index.json").write_text(json.dumps(index, indent=2), encoding="utf-8")

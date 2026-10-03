@@ -55,6 +55,18 @@ def test_skipped_required_check_blocks_approval():
     assert d.status != "approved"
 
 
+def test_skip_blocked_by_a_real_failure_is_covered():
+    res = [cr("a", failed("DOC_WRONG_TYPE", "x")), cr("b", skipped("needs a", blocked_by="a")), ALL_PASS[2]]
+    d = decide(res, flags())
+    assert d.route == "vendor_followup" and not any(t.code == "CHECK_MISSING" for t in d.triggered)
+
+
+def test_skip_blocked_by_a_passing_check_is_not_covered():
+    res = [cr("a", passed("ok")), cr("b", skipped("claims a", blocked_by="a")), ALL_PASS[2]]
+    d = decide(res, flags())
+    assert d.route == "manual_review" and any(t.code == "CHECK_MISSING" for t in d.triggered)
+
+
 def test_soft_points_reach_threshold():
     res = [*ALL_PASS, cr("e", warned("x", code="FREE_EMAIL_DOMAIN"), False), cr("w", warned("x", code="WATCHLIST_WATCH"), False),
            cr("q", warned("x", code="DEGRADED_DOCUMENT"), False)]
@@ -89,6 +101,7 @@ outcomes = st.one_of(
     st.builds(lambda c, e: warned(e, code=c), st.sampled_from(SOFT), free_text),
     st.builds(lambda e: warned(e), free_text),
     st.builds(lambda e: skipped(e), free_text),
+    st.builds(lambda e, b: skipped(e, blocked_by=b), free_text, st.sampled_from(["a", "b", "c", "d", "e"])),
 )
 results_st = st.lists(st.tuples(st.sampled_from(CHECK_NAMES), outcomes), max_size=8)
 flags_st = st.builds(

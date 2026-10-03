@@ -22,6 +22,8 @@ class CheckOutcome(BaseModel):
     risk_points: int = 0
     explanation: str
     evidence: dict[str, Any] = Field(default_factory=dict)
+    # Set by code when a check could not run because another check already failed with a blocking code.
+    blocked_by: str | None = None
 
     @model_validator(mode="after")
     def _consistent(self) -> "CheckOutcome":
@@ -50,8 +52,8 @@ def warned(explanation: str, code: str | None = None, **evidence: Any) -> CheckO
     return CheckOutcome(result="warn", reason_code=code, explanation=explanation, evidence=evidence)
 
 
-def skipped(explanation: str, **evidence: Any) -> CheckOutcome:
-    return CheckOutcome(result="skipped", explanation=explanation, evidence=evidence)
+def skipped(explanation: str, blocked_by: str | None = None, **evidence: Any) -> CheckOutcome:
+    return CheckOutcome(result="skipped", explanation=explanation, evidence=evidence, blocked_by=blocked_by)
 
 
 class CheckResult(CheckOutcome):

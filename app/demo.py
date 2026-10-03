@@ -12,6 +12,8 @@ def boot() -> None:
     db.init_db()
     config.uploads_dir.mkdir(parents=True, exist_ok=True)
     seed()
+    from app.pipeline.runner import recover_interrupted_runs
+    recover_interrupted_runs()
 
 
 def reset(actor: str) -> None:

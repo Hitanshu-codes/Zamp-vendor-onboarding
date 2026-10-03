@@ -1,0 +1,29 @@
+{
+  "task": "classify_extract",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "DocumentExtraction",
+  "key": "176de28781d2ae39bcd8eb10ada1f93b4fa8b5f2a530a791a7597f1df39123a5",
+  "output_text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"Unit 4, Riverside Park, Leeds LS11 5DF, United Kingdom\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"GB\",\n  \"directors_or_owners\": [\n    \"Harriet Lowe\",\n    \"Samuel Okafor\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Pale Harbor Logistics Ltd\",\n  \"notes\": null,\n  \"registration_date\": \"2017-05-02\",\n  \"secondary_tax_id\": null,\n  \"tax_id\": \"GB246813579\",\n  \"tax_id_type\": \"VAT\",\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0TqYR80kTP5Hl7Nku3AS4yi9pxMzF1OVF6/6ESNI9LbbH99fgVu5c2iQwnMBeeRT+hz/aRYAzJhAkcj9K6NHOMKqitNaCADL9UjNq4KHKM8JuamMWtQjarlOk=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"Unit 4, Riverside Park, Leeds LS11 5DF, United Kingdom\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"GB\",\n  \"directors_or_owners\": [\n    \"Harriet Lowe\",\n    \"Samuel Okafor\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Pale Harbor Logistics Ltd\",\n  \"notes\": null,\n  \"registration_date\": \"2017-05-02\",\n  \"secondary_tax_id\": null,\n  \"tax_id\": \"GB246813579\",\n  \"tax_id_type\": \"VAT\",\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 793,
+    "total_output_tokens": 297,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 2920
+}
