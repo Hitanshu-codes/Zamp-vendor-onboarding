@@ -1,0 +1,29 @@
+{
+  "task": "classify_extract",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "DocumentExtraction",
+  "key": "b90e869c5258cc37383af1314770832087658821c52e3eeff61bc929de91978b",
+  "output_text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"1200 Lamar Blvd, Suite 400, Austin, TX 78703, USA\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"US\",\n  \"directors_or_owners\": [\n    \"Elena Park\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Harborview Robotics Inc\",\n  \"notes\": null,\n  \"registration_date\": \"2019-03-01\",\n  \"secondary_tax_id\": null,\n  \"tax_id\": \"83-174926\",\n  \"tax_id_type\": \"EIN\",\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0TZwqq2NU5r4b7T7y83vkjhCNXe/EkzUbgGvlehqADg0eoXvIh+U4g8pjpY6F/9UHpa43FOSDlVWaAqLX6wZtmd+r5Wj86kQfHGg6720ozw7K8jHo0CdlBypI=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"1200 Lamar Blvd, Suite 400, Austin, TX 78703, USA\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"US\",\n  \"directors_or_owners\": [\n    \"Elena Park\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Harborview Robotics Inc\",\n  \"notes\": null,\n  \"registration_date\": \"2019-03-01\",\n  \"secondary_tax_id\": null,\n  \"tax_id\": \"83-174926\",\n  \"tax_id_type\": \"EIN\",\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 793,
+    "total_output_tokens": 296,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 3652
+}

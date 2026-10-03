@@ -60,4 +60,5 @@ class TaxRuleExtraction(BaseModel):
     description: str | None = None
     regex: str | None = Field(None, description="A regular expression for the full identifier, anchored with ^ and $.")
     example_valid_ids: list[str] = Field(default_factory=list, description="Example identifiers printed on the page, verbatim.")
+    format_templates: list[str] = Field(default_factory=list, description="Format templates printed on the page, verbatim, e.g. 'XX-XXXXXXX'.")
     checksum_algorithm_name: str | None = None

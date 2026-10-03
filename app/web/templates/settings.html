@@ -29,7 +29,8 @@
     <div class="field">
       <label for="search_provider">Tax-rule search provider</label>
       <select id="search_provider" name="search_provider">
-        <option value="gemini" {% if settings.search_provider == "gemini" %}selected{% endif %}>Gemini + Google Search (live)</option>
+        <option value="gemini" {% if settings.search_provider == "gemini" %}selected{% endif %}>Gemini + Google Search (live; falls back to curated official sources)</option>
+        <option value="directory" {% if settings.search_provider == "directory" %}selected{% endif %}>Curated official sources only (live fetch)</option>
         <option value="fixture" {% if settings.search_provider == "fixture" %}selected{% endif %}>Fixture pages (offline / tests)</option>
       </select>
     </div>

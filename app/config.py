@@ -28,6 +28,7 @@ class Config:
     llm_mode: str = field(default_factory=lambda: _str("LLM_MODE", "replay"))  # live | record | replay
     llm_timeout_seconds: int = field(default_factory=lambda: _int("LLM_TIMEOUT_SECONDS", 45))
     search_provider: str = field(default_factory=lambda: _str("SEARCH_PROVIDER", "gemini"))  # gemini | fixture
+    tax_source_allowlist: str = field(default_factory=lambda: _str("TAX_SOURCE_ALLOWLIST"))  # extra domains, comma-separated
     daily_llm_call_cap: int = field(default_factory=lambda: _int("DAILY_LLM_CALL_CAP", 500))
 
     email_provider: str = field(default_factory=lambda: _str("EMAIL_PROVIDER", "outbox"))  # outbox | resend

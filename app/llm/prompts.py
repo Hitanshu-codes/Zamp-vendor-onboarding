@@ -78,7 +78,8 @@ TAX_RULE_EXTRACT_SYSTEM = f"""You extract the format of a tax identifier from a 
 {UNTRUSTED_RULES}
 Only report what the page states. Write a regular expression that matches the WHOLE identifier, anchored with ^ and $,
 using simple character classes and fixed repetition counts. Copy example identifiers verbatim from the page;
-never invent examples. If the page does not state the format, set found to false."""
+never invent examples. If the page shows a format template instead (such as XX-XXXXXXX), copy it verbatim into
+format_templates. If the page does not state the format, set found to false."""
 
 
 def tax_rule_extract_user(country: str, tax_type: str, url: str, page_text: str) -> str:

@@ -266,3 +266,11 @@ dl.evidence dd { word-break: break-word; }
 
 .demo-helper { margin-top: 12px; padding: 10px; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); }
 .demo-helper select { width: auto; }
+
+/* --- tax rules ---------------------------------------------------------------- */
+.rule-list { display: flex; flex-direction: column; gap: 0; }
+.rule-head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.rule-head h2 .badge { vertical-align: 2px; margin-left: 6px; }
+.rule-meta { text-align: right; }
+.rule-actions summary { cursor: pointer; color: var(--accent); font-weight: 500; margin-top: 8px; }
+.forget { margin-top: 4px; }

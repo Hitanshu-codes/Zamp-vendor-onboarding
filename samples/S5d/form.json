@@ -1,0 +1,16 @@
+{
+  "legal_name": "Andes Copper Logistics SpA",
+  "trade_name": "",
+  "country": "CL",
+  "entity_type": "company",
+  "registered_address": "Av. Apoquindo 4500, Oficina 1201, Las Condes, Santiago, Chile",
+  "contact_name": "Camila Rojas",
+  "contact_email": "finanzas@andescopper.example",
+  "tax_id": "76.354.771-K",
+  "tax_id_type": "RUT",
+  "bank_account_holder": "Andes Copper Logistics SpA",
+  "bank_account_number": "000123456789",
+  "iban": "",
+  "bank_code": "BCHICLRM",
+  "vendor_category": "goods"
+}

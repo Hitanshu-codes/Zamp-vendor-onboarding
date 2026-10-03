@@ -1,33 +1,15 @@
 """Stage 5: Find the format rule for (country, tax type). Learns it from the web on a miss (see tax_learning)."""
 from __future__ import annotations
 
-from datetime import date
-
-from app import clock, db
-from app.config import config
-from app.domain.taxids import PRIMARY_TAX_TYPE, TaxRule
+from app import db, tax_registry
+from app.domain.taxids import PRIMARY_TAX_TYPE
 from app.models import failed, passed
 from app.pipeline import tax_learning
 from app.pipeline.context import RunContext
 
-STATUS_ORDER = {"verified": 0, "seed": 1, "provisional": 2}
-
-
-def find_rule(country: str, tax_type: str) -> TaxRule | None:
-    rows = db.query("SELECT * FROM tax_rules WHERE country = ? AND tax_type = ? AND status != 'disabled'", (country, tax_type))
-    if not rows:
-        return None
-    best = min(rows, key=lambda r: (STATUS_ORDER.get(r["status"], 9), -r["id"]))
-    return TaxRule.from_row(best)
-
-
-def all_active_rules() -> list[TaxRule]:
-    return [TaxRule.from_row(r) for r in db.query("SELECT * FROM tax_rules WHERE status != 'disabled'")]
-
-
-def reverify_due(rule_row) -> bool:
-    last = (rule_row["last_verified_at"] or rule_row["created_at"])[:10]
-    return (clock.today() - date.fromisoformat(last)).days > config.rule_reverify_days
+find_rule = tax_registry.find_rule
+all_active_rules = tax_registry.all_active_rules
+reverify_due = tax_registry.reverify_due
 
 
 async def run(ctx: RunContext) -> None:

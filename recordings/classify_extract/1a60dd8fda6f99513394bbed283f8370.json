@@ -1,0 +1,29 @@
+{
+  "task": "classify_extract",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "DocumentExtraction",
+  "key": "1a60dd8fda6f99513394bbed283f8370f3fca3789eacf6156208cf04b7f95b8b",
+  "output_text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"1200 Lamar Blvd, Suite 400, Austin, TX 78703, USA\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"US\",\n  \"directors_or_owners\": [\n    \"Dana Whitfield\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Brightwater Analytics Inc\",\n  \"notes\": null,\n  \"registration_date\": \"2019-03-01\",\n  \"secondary_tax_id\": null,\n  \"tax_id\": \"47-2918365\",\n  \"tax_id_type\": \"EIN\",\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0TGk4WoVqc6d/EWgomL0YUfpc14R4ztt2w2iBcxRgOlr7SVt8TuCMFGI9EDk327VLg7iewFCpRjiXZEyRGL3OyvtSKsm0yu/6TTDzRNpGdNQ8PtMToLXq0bkw=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"1200 Lamar Blvd, Suite 400, Austin, TX 78703, USA\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"US\",\n  \"directors_or_owners\": [\n    \"Dana Whitfield\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Brightwater Analytics Inc\",\n  \"notes\": null,\n  \"registration_date\": \"2019-03-01\",\n  \"secondary_tax_id\": null,\n  \"tax_id\": \"47-2918365\",\n  \"tax_id_type\": \"EIN\",\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 793,
+    "total_output_tokens": 297,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 13898
+}

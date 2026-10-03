@@ -4,7 +4,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import RedirectResponse
 
-from app import audit, clock, db, demo, scheduler, settings_store
+from app import audit, clock, db, demo, scheduler, settings_store, tax_registry
 from app.config import config
 from app.security.auth import COOKIE, SESSION_MAX_AGE, auth_enabled, make_cookie, password_ok
 from app.web.render import page, templates
@@ -55,10 +55,42 @@ def dashboard(request: Request):
 
 
 @router.get("/rules")
-def rules(request: Request):
-    rows = db.query("SELECT * FROM tax_rules ORDER BY country, tax_type")
+def rules(request: Request, error: str = "", done: str = ""):
+    rows = db.query("SELECT * FROM tax_rules ORDER BY country, tax_type, id")
     log = db.query("SELECT * FROM tax_rule_search_log ORDER BY id DESC LIMIT 50")
-    return page(request, "rules.html", "rules", rules=rows, search_log=log)
+    hits = sum(r["times_used"] for r in rows)
+    searches = db.query_one("SELECT COUNT(*) c FROM tax_rule_search_log")["c"]
+    return page(request, "rules.html", "rules", rules=rows, search_log=log, reverify={r["id"]: tax_registry.reverify_due(r) for r in rows},
+                error=error, done=done, cache_hits=hits, searches=searches, loads=db.loads, promote_n=config.rule_promote_after_n_approved)
+
+
+@router.post("/rules/{rule_id}/{action}")
+async def rule_action(rule_id: int, action: str, request: Request):
+    f = await request.form()
+    reason = " ".join(str(f.get("reason", "")).split())
+    actor = _reviewer_actor()
+    try:
+        if action != "forget" and len(reason) < 5:
+            raise ValueError("Please type a reason; it is stored in the audit trail.")
+        if action == "verify":
+            tax_registry.verify(rule_id, actor, reason)
+        elif action == "disable":
+            tax_registry.disable(rule_id, actor, reason)
+        elif action == "enable":
+            tax_registry.enable(rule_id, actor, reason)
+        elif action == "edit":
+            report = tax_registry.edit(rule_id, actor, reason, str(f.get("regex", "")).strip(), str(f.get("example", "")).strip(),
+                                       str(f.get("description", "")).strip())
+            if not report.passed:
+                raise ValueError("Edited rule failed the self-test: " + "; ".join(report.reasons))
+        elif action == "forget":
+            tax_registry.forget(rule_id, actor)
+        else:
+            raise ValueError("Unknown action.")
+    except ValueError as exc:
+        from urllib.parse import quote
+        return RedirectResponse(f"/rules?error={quote(str(exc))}#rule-{rule_id}", status_code=303)
+    return RedirectResponse(f"/rules?done={action}#rule-{rule_id}", status_code=303)
 
 
 @router.get("/watchlist")
@@ -92,8 +124,8 @@ def settings_save(
 ):
     if llm_mode not in ("live", "record", "replay"):
         llm_mode = "replay"
-    if search_provider not in ("gemini", "fixture"):
-        search_provider = "fixture"
+    if search_provider not in ("gemini", "directory", "fixture"):
+        search_provider = "directory"
     reviewer_name = " ".join(reviewer_name.split())[:60] or "Demo Reviewer"
     actor = _reviewer_actor()  # attribute the change to whoever made it, before any rename
     before = settings_store.all_settings()

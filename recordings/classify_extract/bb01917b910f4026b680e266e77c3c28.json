@@ -1,0 +1,29 @@
+{
+  "task": "classify_extract",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "DocumentExtraction",
+  "key": "bb01917b910f4026b680e266e77c3c28d33e8f1b17897d9431aa1f50f7b76017",
+  "output_text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"1200 Lamar Blvd, Suite 400, Austin, TX 78703, USA\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"US\",\n  \"directors_or_owners\": [],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Cobalt Ridge Software Inc\",\n  \"notes\": null,\n  \"registration_date\": \"2019-03-01\",\n  \"secondary_tax_id\": null,\n  \"tax_id\": \"83-1749260\",\n  \"tax_id_type\": \"EIN\",\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0TOJpslfAvh1W3s2dQSiHaTv3Wf1x10TUvZh9trLh9m44q9/is80YZGbbTETl993ZaCszZ/XLmYIqhfUdM08S2WTH/vCxOpw+CRvWXteLmc/rHPRBqUjB6Ka0=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"1200 Lamar Blvd, Suite 400, Austin, TX 78703, USA\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"US\",\n  \"directors_or_owners\": [],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Cobalt Ridge Software Inc\",\n  \"notes\": null,\n  \"registration_date\": \"2019-03-01\",\n  \"secondary_tax_id\": null,\n  \"tax_id\": \"83-1749260\",\n  \"tax_id_type\": \"EIN\",\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 793,
+    "total_output_tokens": 288,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 2674
+}

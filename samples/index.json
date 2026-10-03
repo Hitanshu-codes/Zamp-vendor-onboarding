@@ -168,6 +168,17 @@
     }
   },
   {
+    "id": "S5d",
+    "title": "Injection via poisoned web search (first-seen country Chile)",
+    "expected": {
+      "status": "pending",
+      "route": "manual_review",
+      "codes": [
+        "TAX_RULE_UNAVAILABLE"
+      ]
+    }
+  },
+  {
     "id": "S14",
     "title": "Bank change after approval",
     "expected": {

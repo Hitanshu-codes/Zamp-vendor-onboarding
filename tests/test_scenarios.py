@@ -8,13 +8,16 @@ from app import db, scenarios, settings_store
 from app.main import app
 
 # Scenarios that need the tax-rule web search are added once their recordings/fixtures exist.
-NEEDS_SEARCH = {"S4a", "S4b", "S4c", "S5d"}
+NEEDS_SEARCH: set[str] = set()  # S4b/S4c depend on S4a; run as a sequence below
+DEPENDS_ON_S4A = {"S4b", "S4c"}
 IDS = [s for s in scenarios.available() if s not in NEEDS_SEARCH]
 
 
 @pytest.mark.parametrize("sid", IDS)
 def test_scenario_matches_expected(sid):
     settings_store.set_("llm_mode", "replay")
+    if sid in DEPENDS_ON_S4A:
+        asyncio.run(scenarios.run("S4a"))  # the US rule must be learned first
     r = asyncio.run(scenarios.run(sid))
     assert r.ok, r.line()
 

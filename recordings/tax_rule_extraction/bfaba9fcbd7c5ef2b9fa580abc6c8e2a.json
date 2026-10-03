@@ -1,0 +1,29 @@
+{
+  "task": "tax_rule_extraction",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "TaxRuleExtraction",
+  "key": "bfaba9fcbd7c5ef2b9fa580abc6c8e2a8ec79e5081f0cfea1240f8d85f6411f7",
+  "output_text": "{\n  \"found\": true,\n  \"checksum_algorithm_name\": null,\n  \"description\": \"RUT validation pattern\",\n  \"example_valid_ids\": [\n    \"76.354.771-K\"\n  ],\n  \"format_templates\": [],\n  \"regex\": \"^.*$\",\n  \"tax_type\": \"RUT\"\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0TyLpsYm5tmpMTaj5dNOSK8GUTCTaOrZvWFmrwGqyncBVPg8ZI2i0oaYNwWYVBDfN1mKimNVnmaj5Hvw2seNRs2RRNl0aHC2o+jn49MIskt2VwbvbvN93eG/A=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"found\": true,\n  \"checksum_algorithm_name\": null,\n  \"description\": \"RUT validation pattern\",\n  \"example_valid_ids\": [\n    \"76.354.771-K\"\n  ],\n  \"format_templates\": [],\n  \"regex\": \"^.*$\",\n  \"tax_type\": \"RUT\"\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 270,
+    "total_output_tokens": 88,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 1422
+}

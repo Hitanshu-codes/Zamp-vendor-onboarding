@@ -1,0 +1,29 @@
+{
+  "task": "classify_extract",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "DocumentExtraction",
+  "key": "01ab0d69277a8e7648695231df23d8b861edad4ed915831fec3971d98b36ddbe",
+  "output_text": "{\n  \"doc_type\": \"bank_letter_or_cheque\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": \"Harborview Robotics Inc\",\n  \"account_number\": \"6603765124\",\n  \"account_type\": \"current\",\n  \"address\": null,\n  \"bank_code\": \"123456780\",\n  \"bank_name\": \"First Lakeshore Bank\",\n  \"country\": null,\n  \"directors_or_owners\": [],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": \"2026-09-15\",\n  \"language\": \"en\",\n  \"legal_name\": null,\n  \"notes\": null,\n  \"registration_date\": null,\n  \"secondary_tax_id\": null,\n  \"tax_id\": null,\n  \"tax_id_type\": null,\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0T5i8cbSrwa+cDRa+bgoqTh1PR9gWId1kNUaG17ooopwK1udkR3M3naJIT+sZmhFHrmhoj/tdNOwJwrjdNfgQCZswTF1AQy7/cGbto47oTLn0VqgUd7S07spk=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"doc_type\": \"bank_letter_or_cheque\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": \"Harborview Robotics Inc\",\n  \"account_number\": \"6603765124\",\n  \"account_type\": \"current\",\n  \"address\": null,\n  \"bank_code\": \"123456780\",\n  \"bank_name\": \"First Lakeshore Bank\",\n  \"country\": null,\n  \"directors_or_owners\": [],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": \"2026-09-15\",\n  \"language\": \"en\",\n  \"legal_name\": null,\n  \"notes\": null,\n  \"registration_date\": null,\n  \"secondary_tax_id\": null,\n  \"tax_id\": null,\n  \"tax_id_type\": null,\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 795,
+    "total_output_tokens": 278,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 2893
+}

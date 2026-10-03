@@ -1,0 +1,29 @@
+{
+  "task": "classify_extract",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "DocumentExtraction",
+  "key": "23c05152b7d4d1aaa8ae766edbcabf5d1a4474100e0241d441c8d07399100d41",
+  "output_text": "{\n  \"doc_type\": \"bank_letter_or_cheque\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": \"Brightwater Analytics Inc\",\n  \"account_number\": \"4401987362\",\n  \"account_type\": \"current\",\n  \"address\": null,\n  \"bank_code\": \"123456780\",\n  \"bank_name\": \"First Lakeshore Bank\",\n  \"country\": null,\n  \"directors_or_owners\": [],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": \"2026-09-15\",\n  \"language\": \"en\",\n  \"legal_name\": \"Brightwater Analytics Inc\",\n  \"notes\": \"First Lakeshore Bank, Austin branch\",\n  \"registration_date\": null,\n  \"secondary_tax_id\": null,\n  \"tax_id\": null,\n  \"tax_id_type\": null,\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0T0GgOyon3L4A/RSUO3BDl5i2zGljSRvWNH7bpv/B57vAhxTQ4NGMHT4L7JDtCqGG2OiOl7TGY0JUGRWLzAQXIYY7uvXvuOV9KAYGCXn1woHAZKB3M8O3HfNI=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"doc_type\": \"bank_letter_or_cheque\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": \"Brightwater Analytics Inc\",\n  \"account_number\": \"4401987362\",\n  \"account_type\": \"current\",\n  \"address\": null,\n  \"bank_code\": \"123456780\",\n  \"bank_name\": \"First Lakeshore Bank\",\n  \"country\": null,\n  \"directors_or_owners\": [],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": \"2026-09-15\",\n  \"language\": \"en\",\n  \"legal_name\": \"Brightwater Analytics Inc\",\n  \"notes\": \"First Lakeshore Bank, Austin branch\",\n  \"registration_date\": null,\n  \"secondary_tax_id\": null,\n  \"tax_id\": null,\n  \"tax_id_type\": null,\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 795,
+    "total_output_tokens": 288,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 4992
+}

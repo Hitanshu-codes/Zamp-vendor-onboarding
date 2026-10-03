@@ -1,0 +1,10 @@
+{
+  "query": "United States EIN format (offline fixture)",
+  "pages": [
+    {
+      "url": "https://www.irs.gov/pub/irs-pdf/p1635.pdf",
+      "title": "IRS Publication 1635 (excerpt, offline fixture)",
+      "text": "Employer Identification Number. Understanding Your EIN. An Employer Identification Number (EIN) is a nine-digit number that IRS assigns in the following format: XX-XXXXXXX. It is used to identify the tax accounts of employers and certain others who have no employees."
+    }
+  ]
+}

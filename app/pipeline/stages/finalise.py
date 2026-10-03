@@ -1,7 +1,7 @@
 """Stage 11: Finalise. Update the submission, close the run, write the audit trail."""
 from __future__ import annotations
 
-from app import audit, clock, db, events
+from app import audit, clock, db, events, tax_registry
 from app.domain.banking import normalize_account
 from app.domain.names import normalize_name
 from app.domain.validators import email_domain
@@ -22,6 +22,7 @@ def add_vendor(submission_id: int, form: dict) -> int:
          submission_id, clock.now_iso()),
     )
     db.execute("UPDATE submissions SET vendor_id = ? WHERE id = ?", (vid, submission_id))
+    tax_registry.confirm_on_approval(submission_id)
     return vid
 
 
