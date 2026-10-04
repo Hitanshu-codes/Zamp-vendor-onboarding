@@ -1,0 +1,11 @@
+{
+  "id": "S17",
+  "title": "Sole proprietor with a personal account",
+  "notes": "Personal account is fine when it belongs to the proprietor; no incorporation certificate needed.",
+  "expected": {
+    "status": "approved",
+    "route": "none",
+    "codes": []
+  },
+  "settings": {}
+}

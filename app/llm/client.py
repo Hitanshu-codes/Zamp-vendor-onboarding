@@ -3,7 +3,8 @@
 - Structured output: the response must match a pydantic schema, and it is re-validated here.
 - Fail closed: kill switch, missing key, cap reached, timeout, API error, refusal, empty or
   invalid output all raise LLMUnavailable. Callers turn that into an LLM_UNAVAILABLE check.
-- Modes: live (real calls), record (live + save), replay (saved responses only; missing = unavailable).
+- Modes: live (real calls), record (live + save), replay (saved responses only; missing = unavailable),
+  auto (replay when a recording exists, otherwise live + record; the deployment default).
 - Every call is written to the audit log (task, model, input hashes, truncated output, latency, tokens).
 """
 from __future__ import annotations
@@ -145,6 +146,8 @@ async def _invoke(task: str, model: str, system: str, parts: list[Part], schema_
         raise LLMUnavailable("LLM disabled by the admin kill switch", task)
 
     path = _recording_path(task, key)
+    if mode == "auto":  # recorded answer if we have one, otherwise a live call that is then recorded
+        mode = "replay" if path.exists() else "record"
     if mode == "replay":
         if not path.exists():
             raise LLMUnavailable("no recorded response for this exact input (replay mode fails closed)", task)

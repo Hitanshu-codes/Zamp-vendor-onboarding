@@ -1,0 +1,29 @@
+{
+  "task": "classify_extract",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "DocumentExtraction",
+  "key": "398bd288c99a961c2ce8bfde532d2799a45f4b5ab957ef778c879c3cce36d854",
+  "output_text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"14 Marine Drive, Ernakulam, Kochi 682031, Kerala, India\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"IN\",\n  \"directors_or_owners\": [\n    \"Priya Nair\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Priya Nair\",\n  \"notes\": null,\n  \"registration_date\": \"2018-09-01\",\n  \"secondary_tax_id\": \"ABKPN8714D\",\n  \"tax_id\": \"27ABKPN8714D1ZJ\",\n  \"tax_id_type\": \"GSTIN\",\n  \"trade_name\": \"Nair Design Studio\",\n  \"translation_of_key_fields\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0TsVGTrsnqGtxbLSBFbdj/xDkYeUBSW5SptYb8KKufZsREGyDQ3kucNpSwdC5TdMJRoOfFViUu9m+RUSlhMHzrlMdbw/ju8CvDeKfRQ+P83v03Udqne0YtuNo=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"14 Marine Drive, Ernakulam, Kochi 682031, Kerala, India\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"IN\",\n  \"directors_or_owners\": [\n    \"Priya Nair\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Priya Nair\",\n  \"notes\": null,\n  \"registration_date\": \"2018-09-01\",\n  \"secondary_tax_id\": \"ABKPN8714D\",\n  \"tax_id\": \"27ABKPN8714D1ZJ\",\n  \"tax_id_type\": \"GSTIN\",\n  \"trade_name\": \"Nair Design Studio\",\n  \"translation_of_key_fields\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 793,
+    "total_output_tokens": 309,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 2718
+}

@@ -163,7 +163,7 @@ def settings_save(
     reviewer_name: str = Form("Demo Reviewer"),
     evaluator_view: str = Form("false"),
 ):
-    if llm_mode not in ("live", "record", "replay"):
+    if llm_mode not in ("live", "record", "replay", "auto"):
         llm_mode = "replay"
     if search_provider not in ("gemini", "directory", "fixture"):
         search_provider = "directory"

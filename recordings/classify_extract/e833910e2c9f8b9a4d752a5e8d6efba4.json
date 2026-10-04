@@ -1,0 +1,29 @@
+{
+  "task": "classify_extract",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "DocumentExtraction",
+  "key": "e833910e2c9f8b9a4d752a5e8d6efba4895ee83cef3a30ff9dba9649cbbbd84b",
+  "output_text": "{\n  \"doc_type\": \"bank_letter_or_cheque\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": \"Pinecrest Fasteners Private Limited\",\n  \"account_number\": \"50100579135791\",\n  \"account_type\": \"current\",\n  \"address\": null,\n  \"bank_code\": \"HDFC0002198\",\n  \"bank_name\": \"HDFC Bank\",\n  \"country\": \"IN\",\n  \"directors_or_owners\": [],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": \"2026-09-15\",\n  \"language\": \"en\",\n  \"legal_name\": \"Pinecrest Fasteners Private Limited\",\n  \"notes\": null,\n  \"registration_date\": null,\n  \"secondary_tax_id\": null,\n  \"tax_id\": null,\n  \"tax_id_type\": null,\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0T9vz5PGY3naKSPOGcsuqgDb5JwJ+Hg+kfT9koc+v6KG7QTUXaR/1JsOQyo21CpK0dz3RCD5lcDqOykDp3OKpXQaZflSeDfoISdQ3YBqsekzQw3ImKYjmfQXk=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"doc_type\": \"bank_letter_or_cheque\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": \"Pinecrest Fasteners Private Limited\",\n  \"account_number\": \"50100579135791\",\n  \"account_type\": \"current\",\n  \"address\": null,\n  \"bank_code\": \"HDFC0002198\",\n  \"bank_name\": \"HDFC Bank\",\n  \"country\": \"IN\",\n  \"directors_or_owners\": [],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": \"2026-09-15\",\n  \"language\": \"en\",\n  \"legal_name\": \"Pinecrest Fasteners Private Limited\",\n  \"notes\": null,\n  \"registration_date\": null,\n  \"secondary_tax_id\": null,\n  \"tax_id\": null,\n  \"tax_id_type\": null,\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 795,
+    "total_output_tokens": 289,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 3689
+}

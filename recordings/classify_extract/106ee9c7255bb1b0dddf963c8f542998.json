@@ -1,0 +1,29 @@
+{
+  "task": "classify_extract",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "DocumentExtraction",
+  "key": "106ee9c7255bb1b0dddf963c8f5429982c63fb661abf6c919cc9e232704b10ce",
+  "output_text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"Unit 12, Shree Industrial Estate, Andheri East, Mumbai 400069, Maharashtra, India\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"IN\",\n  \"directors_or_owners\": [\n    \"Meera Kulkarni\",\n    \"Arjun Patil\"\n  ],\n  \"expiry_date\": \"2026-06-30\",\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Pinecrest Fasteners Private Limited\",\n  \"notes\": null,\n  \"registration_date\": \"2018-09-01\",\n  \"secondary_tax_id\": \"AAVCP4370W\",\n  \"tax_id\": \"27AAVCP4370W1Z0\",\n  \"tax_id_type\": \"GSTIN\",\n  \"trade_name\": \"Pinecrest Fasteners Private Limited\",\n  \"translation_of_key_fields\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0T2ANVDwSh3EgqwGQUiKOuhBJ8NxSRqrujnUSrzEV0IhOgZ8gNgKvtH87xkOnq/Y0MlGIB6mHjgyHRZvaWoX6DTH94ILAsKvH5C9ENVCZuirRiF4Gk052YR0E=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"Unit 12, Shree Industrial Estate, Andheri East, Mumbai 400069, Maharashtra, India\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"IN\",\n  \"directors_or_owners\": [\n    \"Meera Kulkarni\",\n    \"Arjun Patil\"\n  ],\n  \"expiry_date\": \"2026-06-30\",\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Pinecrest Fasteners Private Limited\",\n  \"notes\": null,\n  \"registration_date\": \"2018-09-01\",\n  \"secondary_tax_id\": \"AAVCP4370W\",\n  \"tax_id\": \"27AAVCP4370W1Z0\",\n  \"tax_id_type\": \"GSTIN\",\n  \"trade_name\": \"Pinecrest Fasteners Private Limited\",\n  \"translation_of_key_fields\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 793,
+    "total_output_tokens": 337,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 3329
+}

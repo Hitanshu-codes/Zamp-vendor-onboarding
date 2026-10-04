@@ -1,0 +1,11 @@
+{
+  "id": "S8",
+  "title": "Legal suffix variants (Pvt. Ltd. vs Private Limited)",
+  "notes": "Form says 'Lotus Ridge Ceramics Pvt. Ltd.'; documents say 'Private Limited'. Identical after normalisation.",
+  "expected": {
+    "status": "approved",
+    "route": "none",
+    "codes": []
+  },
+  "settings": {}
+}

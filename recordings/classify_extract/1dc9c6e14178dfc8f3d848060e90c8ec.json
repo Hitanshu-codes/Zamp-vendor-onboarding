@@ -1,0 +1,29 @@
+{
+  "task": "classify_extract",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "DocumentExtraction",
+  "key": "1dc9c6e14178dfc8f3d848060e90c8ec84426120a49af9554e700af2b48ab73a",
+  "output_text": "{\n  \"doc_type\": \"incorporation_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"Unit 12, Shree Industrial Estate, Andheri East, Mumbai 400069, Maharashtra, India\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"IN\",\n  \"directors_or_owners\": [\n    \"Meera Kulkarni\",\n    \"Arjun Patil\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": \"2018-06-12\",\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Quartzline Optics Private Limited\",\n  \"notes\": null,\n  \"registration_date\": null,\n  \"secondary_tax_id\": null,\n  \"tax_id\": \"U25200MH2018PTC123456\",\n  \"tax_id_type\": \"CIN\",\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0T/pV7x2TfOfLf7kiFy3EgWgJDpUFQI6rOGC1vbBZsRNQz/mGMTnMq1uQvOrSgKpsUq5l2vm5BZF+cQhUqMYRaZ6AtJbT6mhed1Boa1ZoPQHSHaR4wXdd+jj4=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"doc_type\": \"incorporation_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"Unit 12, Shree Industrial Estate, Andheri East, Mumbai 400069, Maharashtra, India\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"IN\",\n  \"directors_or_owners\": [\n    \"Meera Kulkarni\",\n    \"Arjun Patil\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": \"2018-06-12\",\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Quartzline Optics Private Limited\",\n  \"notes\": null,\n  \"registration_date\": null,\n  \"secondary_tax_id\": null,\n  \"tax_id\": \"U25200MH2018PTC123456\",\n  \"tax_id_type\": \"CIN\",\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 793,
+    "total_output_tokens": 316,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 2306
+}

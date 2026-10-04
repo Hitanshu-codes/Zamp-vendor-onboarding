@@ -1,0 +1,13 @@
+{
+  "id": "S18",
+  "title": "Look-alike letters in the company name",
+  "notes": "Form value: legal_name = Northgate Steel Priv\u0430te Limited",
+  "expected": {
+    "status": "pending",
+    "route": "manual_review",
+    "codes": [
+      "NAME_AMBIGUOUS"
+    ]
+  },
+  "settings": {}
+}

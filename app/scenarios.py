@@ -50,9 +50,19 @@ def _run_now(sub_id: int, ver_id: int, trigger: str) -> int:
 
 
 async def run(sid: str) -> ScenarioResult:
+    """Run one scenario; its settings (e.g. kill switch) apply only for the duration of the scenario."""
     form, files, meta = load(sid)
+    saved = {k: settings_store.get(k) for k in meta.get("settings", {})}
     for k, v in meta.get("settings", {}).items():
         settings_store.set_(k, v)
+    try:
+        return await _run(sid, form, files, meta)
+    finally:
+        for k, v in saved.items():
+            settings_store.set_(k, v)
+
+
+async def _run(sid: str, form: dict, files: dict, meta: dict) -> ScenarioResult:
     sub_id, ver_id = runner.create_submission(form, files)
     run_id = _run_now(sub_id, ver_id, "initial")
     await runner.execute(run_id)
@@ -71,6 +81,8 @@ async def run(sid: str) -> ScenarioResult:
     codes = [t["code"] for t in db.loads(dec["reason_codes_json"], [])] if dec else []
     exp = meta["expected"]
     ok = sub["status"] == exp["status"] and sub["route"] == exp["route"] and all(c in codes for c in exp["codes"])
+    if exp.get("codes_any"):
+        ok = ok and any(c in codes for c in exp["codes_any"])
     if exp["status"] == "approved":
         ok = ok and all(c in ("FREE_EMAIL_DOMAIN", "DEGRADED_DOCUMENT") for c in codes)
     return ScenarioResult(sid, ok, sub["status"], sub["route"], codes, exp, run_id, sub_id)

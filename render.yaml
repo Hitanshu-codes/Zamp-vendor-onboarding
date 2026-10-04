@@ -1,0 +1,37 @@
+# Render Blueprint: New > Blueprint > pick this repo. Secrets marked sync:false are entered in the dashboard.
+services:
+  - type: web
+    name: vendor-onboarding
+    runtime: docker
+    plan: free            # free instances sleep after ~15 min idle and lose data on restart (re-seeded on boot)
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: DEMO_PASSWORD
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: PUBLIC_BASE_URL
+        sync: false       # e.g. https://vendor-onboarding.onrender.com (used in vendor email links)
+      - key: LLM_MODE
+        value: auto
+      - key: MODEL_EXTRACT
+        value: gemini-3.5-flash-lite
+      - key: MODEL_JUDGE
+        value: gemini-3.5-flash-lite
+      - key: SEARCH_PROVIDER
+        value: gemini
+      - key: DAILY_LLM_CALL_CAP
+        value: "500"
+      - key: SUBMISSIONS_PER_IP_PER_HOUR
+        value: "60"
+      - key: EMAIL_PROVIDER
+        value: outbox     # set to resend to deliver vendor emails
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        value: "Vendor Onboarding <onboarding@resend.dev>"
+      - key: EMAIL_REDIRECT_TO
+        sync: false

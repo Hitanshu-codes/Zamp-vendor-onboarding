@@ -91,6 +91,7 @@ class Extras:
     hidden_note: str | None = None       # white, 1pt (S5b)
     metadata_title: str | None = None
     lines: list[str] = field(default_factory=list)
+    encrypt: bool = False                # password-protected PDF (S19)
 
 
 def _frame(c: canvas.Canvas, header: str, issuer: str, accent: str = "#1f3a68") -> float:
@@ -160,7 +161,11 @@ def _finish(c: canvas.Canvas, y: float, extras: Extras) -> None:
 
 def _pdf(draw, extras: Extras, title: str) -> bytes:
     buf = io.BytesIO()
-    c = canvas.Canvas(buf, pagesize=A4, invariant=1)  # deterministic bytes, so recordings stay valid
+    kwargs = {}
+    if extras.encrypt:
+        from reportlab.lib.pdfencrypt import StandardEncryption
+        kwargs["encrypt"] = StandardEncryption("vendor-secret", ownerPassword="owner-secret", canPrint=1)
+    c = canvas.Canvas(buf, pagesize=A4, invariant=1, **kwargs)  # deterministic bytes, so recordings stay valid
     c.setTitle(extras.metadata_title or title)
     c.setAuthor("Sample generator")
     draw(c)
@@ -176,7 +181,7 @@ def tax_cert(p: Profile, extras: Extras = Extras()) -> bytes:
         if p.country == "IN":
             y = _frame(c, "Certificate of GST Registration (Form GST REG-06)", "Goods and Services Tax - Specimen Authority")
             rows = [("Registration Number (GSTIN)", p.tax_id), ("PAN", p.secondary_tax_id or ""), ("Legal Name", p.legal_name),
-                    ("Trade Name", p.trade_name or p.legal_name), ("Constitution of Business", "Private Limited Company"),
+                    ("Trade Name", p.trade_name or p.legal_name), ("Constitution of Business", {"sole_proprietor": "Proprietorship", "partnership": "Partnership"}.get(p.entity_type, "Private Limited Company")),
                     ("Principal Place of Business", p.address), ("Date of Liability / Registration", p.registration_date),
                     ("Period of Validity", f"From {p.registration_date} to {p.tax_expiry or 'Not Applicable'}"),
                     ("Type of Registration", "Regular"),
@@ -338,6 +343,46 @@ def scenarios() -> dict[str, dict[str, Any]]:
         notes="Search provider set to the poisoned fixture: one page carries an instruction, one proposes the regex .* .",
         settings={"search_provider": "fixture"})
 
+    # --- supporting scenarios -------------------------------------------------------------------
+    p8 = india("Lotus Ridge Ceramics Private Limited", "AATCL2158U", account="50100357913579", bank_code="HDFC0009976")
+    add("S8", "Legal suffix variants (Pvt. Ltd. vs Private Limited)", p8, {"status": "approved", "route": "none", "codes": []},
+        notes="Form says 'Lotus Ridge Ceramics Pvt. Ltd.'; documents say 'Private Limited'. Identical after normalisation.")
+    p9 = india("Coral Hospitality Private Limited", "AAUCC3269V", account="50100468024680", bank_code="HDFC0001087",
+               trade_name="Bluefin Kitchens")
+    add("S9", "Trade name used as legal name", p9, {"status": "pending", "route": "manual_review", "codes": [],
+        "codes_any": ["NAME_AMBIGUOUS", "NAME_LLM_DISAGREE"]},
+        notes="Form legal name is 'Coral Hospitality Private Limited t/a Bluefin Kitchens'; the documents show only the legal name.")
+    p10 = india("Pinecrest Fasteners Private Limited", "AAVCP4370W", account="50100579135791", bank_code="HDFC0002198", tax_expiry="2026-06-30")
+    add("S10", "Expired tax certificate", p10, {"status": "pending", "route": "vendor_followup", "codes": ["DOC_EXPIRED"]})
+    p12 = india("Northwind Logistics Private Limited", "AABCN4521K", account="50200012345678", bank_code="HDFC0001234",
+                contact_email="accounts@northwind-logistics.example")
+    add("S12", "Duplicate of an existing vendor", p12, {"status": "rejected", "route": "none", "codes": ["DUPLICATE_VENDOR"]},
+        notes="Same GSTIN as active vendor Northwind Logistics.")
+    p13 = india("Riverbend Polymers Private Limited", "AAWCR5481X", account="50100680246802", bank_code="HDFC0003209")
+    add("S13", "LLM outage (kill switch on)", p13, {"status": "pending", "route": "manual_review", "codes": ["LLM_UNAVAILABLE"]},
+        notes="Settings turn the LLM off. Deterministic checks still run and show; nothing can be approved.",
+        settings={"llm_enabled": "false"})
+    p15 = india("Sablewood Furniture Private Limited", "AAXCS6592Y", account="50100791357913", bank_code="HDFC0004310")
+    good = p15.tax_id
+    typo = good[:-1] + ("A" if good[-1] != "A" else "B")
+    add("S15", "Tax ID checksum typo on the form", p15, {"status": "pending", "route": "vendor_followup", "codes": ["TAXID_CHECKSUM_FAIL"]},
+        notes=json.dumps({"tax_id": typo}))
+    p16 = india("Tamarind Agritech Private Limited", "AAYCT7603Z", account="50100802468024", bank_code="HDFC0005421")
+    add("S16", "Valid format for the wrong country", p16, {"status": "pending", "route": "manual_review", "codes": ["TAXID_WRONG_COUNTRY_FORMAT"]},
+        notes=json.dumps({"tax_id": "DE276518394"}))
+    p17 = india("Priya Nair", "ABKPN8714D", entity_type="sole_proprietor", trade_name="Nair Design Studio",
+                directors=["Priya Nair"], contact_name="Priya Nair", contact_email="priya@nairdesign.example",
+                holder="Priya Nair", account_type="savings", account="10293847561", bank_code="SBIN0012345", bank_name="State Bank, Kochi branch",
+                address="14 Marine Drive, Ernakulam, Kochi 682031, Kerala, India")
+    add("S17", "Sole proprietor with a personal account", p17, {"status": "approved", "route": "none", "codes": []},
+        docs={"incorporation_cert": ("none", None)}, notes="Personal account is fine when it belongs to the proprietor; no incorporation certificate needed.")
+    p18 = india("Northgate Steel Private Limited", "AAZCN9814A", account="50100913579135", bank_code="HDFC0006532")
+    add("S18", "Look-alike letters in the company name", p18, {"status": "pending", "route": "manual_review", "codes": ["NAME_AMBIGUOUS"]},
+        notes=json.dumps({"legal_name": "Northgate Steel Privаte Limited"}))
+    p19 = india("Quartzline Optics Private Limited", "ABACQ1925B", account="50101024680246", bank_code="HDFC0007643")
+    add("S19", "Password-protected bank letter", p19, {"status": "pending", "route": "vendor_followup", "codes": ["DOC_UNREADABLE"]},
+        docs={"bank_letter": ("bank_letter", Extras(encrypt=True))})
+
     p14 = india("Silverbirch Electricals Private Limited", "AASCS1047T", account="50100246813579", bank_code="HDFC0008865",
                 contact_email="accounts@silverbirch.example")
     add("S14", "Bank change after approval", p14, {"status": "pending", "route": "manual_review", "codes": ["BANK_CHANGE_REQUEST"]},
@@ -349,11 +394,30 @@ def scenarios() -> dict[str, dict[str, Any]]:
     return s
 
 
+def _json_override(note: str):
+    def apply(sc):
+        changes = json.loads(sc["notes"])
+        sc["notes"] = "Form value: " + ", ".join(f"{k} = {v}" for k, v in changes.items())
+        return changes
+    return apply
+
+
+FORM_OVERRIDES = {
+    "S8": lambda sc: {"legal_name": "Lotus Ridge Ceramics Pvt. Ltd.", "bank_account_holder": "Lotus Ridge Ceramics Pvt. Ltd."},
+    "S9": lambda sc: {"legal_name": "Coral Hospitality Private Limited t/a Bluefin Kitchens"},
+    "S15": _json_override("tax_id"),
+    "S16": _json_override("tax_id"),
+    "S18": _json_override("legal_name"),
+}
+
+
 def build_docs(profile: Profile, overrides: dict) -> dict[str, bytes]:
     makers = {"tax_cert": tax_cert, "bank_letter": bank_letter, "incorporation_cert": incorporation_cert, "utility_bill": utility_bill}
     out: dict[str, bytes] = {}
     for slot in ("tax_cert", "bank_letter", "incorporation_cert"):
         kind, extras = overrides.get(slot, (slot, None))
+        if kind == "none":
+            continue
         maker = makers[kind]
         out[slot] = maker(profile) if kind == "utility_bill" else maker(profile, extras or Extras())
     return out
@@ -371,6 +435,8 @@ def main() -> None:
         if sid == "S5c":
             form.update(json.loads(sc["notes"]))
             sc["notes"] = "The company name field carries an instruction."
+        elif sid in FORM_OVERRIDES:
+            form.update(FORM_OVERRIDES[sid](sc))
         for slot, data in build_docs(profile, sc["docs"]).items():
             (folder / f"{slot}.pdf").write_bytes(data)
         (folder / "form.json").write_text(json.dumps(form, indent=2), encoding="utf-8")

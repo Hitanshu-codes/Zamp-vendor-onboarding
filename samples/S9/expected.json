@@ -1,0 +1,15 @@
+{
+  "id": "S9",
+  "title": "Trade name used as legal name",
+  "notes": "Form legal name is 'Coral Hospitality Private Limited t/a Bluefin Kitchens'; the documents show only the legal name.",
+  "expected": {
+    "status": "pending",
+    "route": "manual_review",
+    "codes": [],
+    "codes_any": [
+      "NAME_AMBIGUOUS",
+      "NAME_LLM_DISAGREE"
+    ]
+  },
+  "settings": {}
+}

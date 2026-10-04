@@ -1,0 +1,29 @@
+{
+  "task": "classify_extract",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "DocumentExtraction",
+  "key": "62f27d24fee6ae38bb9cf249afc15fc82e2dafc18906a01fcf81ca6c95b3427d",
+  "output_text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"Unit 12, Shree Industrial Estate, Andheri East, Mumbai 400069, Maharashtra, India\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"IN\",\n  \"directors_or_owners\": [\n    \"Meera Kulkarni\",\n    \"Arjun Patil\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Coral Hospitality Private Limited\",\n  \"notes\": null,\n  \"registration_date\": \"2018-09-01\",\n  \"secondary_tax_id\": \"AAUCC3269V\",\n  \"tax_id\": \"27AAUCC3269V1ZC\",\n  \"tax_id_type\": \"GSTIN\",\n  \"trade_name\": \"Bluefin Kitchens\",\n  \"translation_of_key_fields\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0TblUNXEfN+RjSpJ+84ftpq5fB1OycDcbTPNZaxOaN5M2/T0pi0aVhuj8aYsEmBZFQQOK6VVN9SzaOkqUfhjdviDYA0e475zI8xgHnwI3bdM1NyEhJR/U8Dis=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"doc_type\": \"tax_registration_certificate\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": null,\n  \"account_number\": null,\n  \"account_type\": \"unknown\",\n  \"address\": \"Unit 12, Shree Industrial Estate, Andheri East, Mumbai 400069, Maharashtra, India\",\n  \"bank_code\": null,\n  \"bank_name\": null,\n  \"country\": \"IN\",\n  \"directors_or_owners\": [\n    \"Meera Kulkarni\",\n    \"Arjun Patil\"\n  ],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": null,\n  \"language\": \"en\",\n  \"legal_name\": \"Coral Hospitality Private Limited\",\n  \"notes\": null,\n  \"registration_date\": \"2018-09-01\",\n  \"secondary_tax_id\": \"AAUCC3269V\",\n  \"tax_id\": \"27AAUCC3269V1ZC\",\n  \"tax_id_type\": \"GSTIN\",\n  \"trade_name\": \"Bluefin Kitchens\",\n  \"translation_of_key_fields\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 793,
+    "total_output_tokens": 322,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 3436
+}

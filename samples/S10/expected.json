@@ -1,0 +1,13 @@
+{
+  "id": "S10",
+  "title": "Expired tax certificate",
+  "notes": "",
+  "expected": {
+    "status": "pending",
+    "route": "vendor_followup",
+    "codes": [
+      "DOC_EXPIRED"
+    ]
+  },
+  "settings": {}
+}

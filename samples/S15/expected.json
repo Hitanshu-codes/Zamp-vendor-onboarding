@@ -1,0 +1,13 @@
+{
+  "id": "S15",
+  "title": "Tax ID checksum typo on the form",
+  "notes": "Form value: tax_id = 27AAXCS6592Y1ZA",
+  "expected": {
+    "status": "pending",
+    "route": "vendor_followup",
+    "codes": [
+      "TAXID_CHECKSUM_FAIL"
+    ]
+  },
+  "settings": {}
+}

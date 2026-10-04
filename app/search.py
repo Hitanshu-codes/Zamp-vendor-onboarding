@@ -199,6 +199,8 @@ async def fetch(url: str) -> FetchedPage:
     """Resolve redirects, enforce the allowlist on the final host, and return plain text."""
     mode = settings_store.get("llm_mode")
     path = _page_path(url)
+    if mode == "auto":
+        mode = "replay" if path.exists() else "record"
     if mode == "replay":
         if not path.exists():
             return FetchedPage(url, url, "", False, "no recorded page (replay mode)")

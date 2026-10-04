@@ -1,0 +1,15 @@
+{
+  "id": "S13",
+  "title": "LLM outage (kill switch on)",
+  "notes": "Settings turn the LLM off. Deterministic checks still run and show; nothing can be approved.",
+  "expected": {
+    "status": "pending",
+    "route": "manual_review",
+    "codes": [
+      "LLM_UNAVAILABLE"
+    ]
+  },
+  "settings": {
+    "llm_enabled": "false"
+  }
+}

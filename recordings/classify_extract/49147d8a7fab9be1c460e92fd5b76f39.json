@@ -1,0 +1,29 @@
+{
+  "task": "classify_extract",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "DocumentExtraction",
+  "key": "49147d8a7fab9be1c460e92fd5b76f39c45df1f8e591e07f279238ace908c531",
+  "output_text": "{\n  \"doc_type\": \"bank_letter_or_cheque\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": \"Sablewood Furniture Private Limited\",\n  \"account_number\": \"50100791357913\",\n  \"account_type\": \"current\",\n  \"address\": null,\n  \"bank_code\": \"HDFC0004310\",\n  \"bank_name\": \"HDFC Bank\",\n  \"country\": \"IN\",\n  \"directors_or_owners\": [],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": \"2026-09-15\",\n  \"language\": \"en\",\n  \"legal_name\": \"Sablewood Furniture Private Limited\",\n  \"notes\": null,\n  \"registration_date\": null,\n  \"secondary_tax_id\": null,\n  \"tax_id\": null,\n  \"tax_id_type\": null,\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0T7he0ioHuVgGLvmqg+FnqaZjVOMS20FIQRbT8Z1UM/Lfwx5iObpNytEoTvADiXt1JQRhudWeGqAPDJpxWuu7B+5D5+9RHxRn5p6Xy8jGNFVOjeqcCcZa41Xg=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"doc_type\": \"bank_letter_or_cheque\",\n  \"type_confidence\": 1.0,\n  \"quality\": \"good\",\n  \"contains_instructions\": false,\n  \"account_holder\": \"Sablewood Furniture Private Limited\",\n  \"account_number\": \"50100791357913\",\n  \"account_type\": \"current\",\n  \"address\": null,\n  \"bank_code\": \"HDFC0004310\",\n  \"bank_name\": \"HDFC Bank\",\n  \"country\": \"IN\",\n  \"directors_or_owners\": [],\n  \"expiry_date\": null,\n  \"iban\": null,\n  \"incorporation_date\": null,\n  \"issue_date\": \"2026-09-15\",\n  \"language\": \"en\",\n  \"legal_name\": \"Sablewood Furniture Private Limited\",\n  \"notes\": null,\n  \"registration_date\": null,\n  \"secondary_tax_id\": null,\n  \"tax_id\": null,\n  \"tax_id_type\": null,\n  \"trade_name\": null,\n  \"translation_of_key_fields\": null\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 795,
+    "total_output_tokens": 289,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 3491
+}

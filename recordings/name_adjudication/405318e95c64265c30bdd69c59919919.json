@@ -1,0 +1,29 @@
+{
+  "task": "name_adjudication",
+  "model": "gemini-3.5-flash-lite",
+  "schema": "NameAdjudication",
+  "key": "405318e95c64265c30bdd69c59919919fce836c2f6f36d24846a4b0ba60d55cf",
+  "output_text": "{\n  \"same_entity\": \"no\",\n  \"reasons\": [\n    \"One name includes a trading-as (t/a) suffix with a completely different brand or business identifier ('Bluefin Kitchens'), which changes the operational scope or business identity compared to the base legal entity name.\"\n  ]\n}",
+  "steps": [
+    {
+      "signature": "EmAKXgFpFH0TBklukPmKCq72Nazu210s3CvbV2O1QH1J+MvaE/xN4GIxB/Z3UoEfBy+RoGYQySOpi0LGcehIY/E6V6oLO7/hHVoE0ywoYOZ+/YVhaVcdXyRbp7EtDQMv9F4=",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "{\n  \"same_entity\": \"no\",\n  \"reasons\": [\n    \"One name includes a trading-as (t/a) suffix with a completely different brand or business identifier ('Bluefin Kitchens'), which changes the operational scope or business identity compared to the base legal entity name.\"\n  ]\n}",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "usage": {
+    "total_input_tokens": 226,
+    "total_output_tokens": 69,
+    "total_thought_tokens": 0,
+    "total_tool_use_tokens": 0
+  },
+  "latency_ms": 1545
+}

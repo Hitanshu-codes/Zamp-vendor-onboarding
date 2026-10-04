@@ -101,3 +101,21 @@ def test_every_call_is_audited(recordings):
     row = db.query_one("SELECT * FROM audit_log WHERE action = 'llm_call:t'")
     assert row is not None and row["actor"] == "llm" and "unavailable" in row["detail_json"]
     assert config.gemini_api_key not in row["detail_json"] or not config.gemini_api_key
+
+
+def test_auto_mode_uses_recording_when_present_and_live_otherwise(recordings, monkeypatch):
+    settings_store.set_("llm_mode", "auto")
+    _write(recordings, json.dumps({"same_entity": "yes", "reasons": []}))
+    parsed, info = run(call_structured("t", "m", SYSTEM, PARTS, NameAdjudication))
+    assert info.source == "replay"
+
+    object.__setattr__(config, "gemini_api_key", config.gemini_api_key or "test-key")
+
+    async def fake_live(*a, **k):
+        return {"output_text": json.dumps({"same_entity": "no", "reasons": []}), "steps": [], "usage": {}}
+
+    monkeypatch.setattr(client, "_live_call", fake_live)
+    other = [Part(text="a different question")]
+    parsed, info = run(call_structured("t", "m", SYSTEM, other, NameAdjudication))
+    assert parsed.same_entity == "no" and info.source == "live"
+    assert any(p.name.endswith(".json") for p in (recordings / "t").iterdir() if p.stat().st_size and "no" in p.read_text())

@@ -1,0 +1,13 @@
+{
+  "id": "S16",
+  "title": "Valid format for the wrong country",
+  "notes": "Form value: tax_id = DE276518394",
+  "expected": {
+    "status": "pending",
+    "route": "manual_review",
+    "codes": [
+      "TAXID_WRONG_COUNTRY_FORMAT"
+    ]
+  },
+  "settings": {}
+}

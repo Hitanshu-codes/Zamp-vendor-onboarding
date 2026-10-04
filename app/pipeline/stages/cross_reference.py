@@ -17,7 +17,10 @@ async def name_check(ctx: RunContext, a: str, b: str, label: str, page: int | No
     verdict, available, llm_ev = None, True, {}
     if band(m, config.name_fuzzy_ambiguous_low) == "ambiguous" and not m.mixed_script:
         try:
-            res, info = await tasks.adjudicate_names(a, b, ctx.form.get("country", ""), ctx.form.get("entity_type", ""))
+            key = ("names", a, b)
+            if key not in ctx.memo:
+                ctx.memo[key] = await tasks.adjudicate_names(a, b, ctx.form.get("country", ""), ctx.form.get("entity_type", ""))
+            res, info = ctx.memo[key]
             verdict, llm_ev = res.same_entity, {**info.evidence(), "llm_reasons": res.reasons}
         except LLMUnavailable as exc:
             available = False

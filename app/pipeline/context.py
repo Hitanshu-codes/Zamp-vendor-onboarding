@@ -64,6 +64,7 @@ class RunContext:
     tax_type: str = ""
     decision: Decision | None = None
     stage: str = "intake"
+    memo: dict = field(default_factory=dict)   # identical LLM questions within one run are asked once
 
     # --- flags read by decide() ------------------------------------------------
     @property

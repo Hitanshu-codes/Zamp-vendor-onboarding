@@ -1,0 +1,13 @@
+{
+  "id": "S19",
+  "title": "Password-protected bank letter",
+  "notes": "",
+  "expected": {
+    "status": "pending",
+    "route": "vendor_followup",
+    "codes": [
+      "DOC_UNREADABLE"
+    ]
+  },
+  "settings": {}
+}

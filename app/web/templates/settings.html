@@ -20,7 +20,7 @@
     <div class="field">
       <label for="llm_mode">LLM mode</label>
       <select id="llm_mode" name="llm_mode">
-        {% for m, d in [("live", "Live: real Gemini calls"), ("record", "Record: live, and save responses"), ("replay", "Replay: saved responses only, no API key needed")] %}
+        {% for m, d in [("auto", "Auto: recorded answer if available, otherwise live (recommended)"), ("live", "Live: real Gemini calls"), ("record", "Record: live, and save responses"), ("replay", "Replay: saved responses only, no API key needed")] %}
           <option value="{{ m }}" {% if settings.llm_mode == m %}selected{% endif %}>{{ d }}</option>
         {% endfor %}
       </select>

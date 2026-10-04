@@ -179,6 +179,114 @@
     }
   },
   {
+    "id": "S8",
+    "title": "Legal suffix variants (Pvt. Ltd. vs Private Limited)",
+    "expected": {
+      "status": "approved",
+      "route": "none",
+      "codes": []
+    }
+  },
+  {
+    "id": "S9",
+    "title": "Trade name used as legal name",
+    "expected": {
+      "status": "pending",
+      "route": "manual_review",
+      "codes": [],
+      "codes_any": [
+        "NAME_AMBIGUOUS",
+        "NAME_LLM_DISAGREE"
+      ]
+    }
+  },
+  {
+    "id": "S10",
+    "title": "Expired tax certificate",
+    "expected": {
+      "status": "pending",
+      "route": "vendor_followup",
+      "codes": [
+        "DOC_EXPIRED"
+      ]
+    }
+  },
+  {
+    "id": "S12",
+    "title": "Duplicate of an existing vendor",
+    "expected": {
+      "status": "rejected",
+      "route": "none",
+      "codes": [
+        "DUPLICATE_VENDOR"
+      ]
+    }
+  },
+  {
+    "id": "S13",
+    "title": "LLM outage (kill switch on)",
+    "expected": {
+      "status": "pending",
+      "route": "manual_review",
+      "codes": [
+        "LLM_UNAVAILABLE"
+      ]
+    }
+  },
+  {
+    "id": "S15",
+    "title": "Tax ID checksum typo on the form",
+    "expected": {
+      "status": "pending",
+      "route": "vendor_followup",
+      "codes": [
+        "TAXID_CHECKSUM_FAIL"
+      ]
+    }
+  },
+  {
+    "id": "S16",
+    "title": "Valid format for the wrong country",
+    "expected": {
+      "status": "pending",
+      "route": "manual_review",
+      "codes": [
+        "TAXID_WRONG_COUNTRY_FORMAT"
+      ]
+    }
+  },
+  {
+    "id": "S17",
+    "title": "Sole proprietor with a personal account",
+    "expected": {
+      "status": "approved",
+      "route": "none",
+      "codes": []
+    }
+  },
+  {
+    "id": "S18",
+    "title": "Look-alike letters in the company name",
+    "expected": {
+      "status": "pending",
+      "route": "manual_review",
+      "codes": [
+        "NAME_AMBIGUOUS"
+      ]
+    }
+  },
+  {
+    "id": "S19",
+    "title": "Password-protected bank letter",
+    "expected": {
+      "status": "pending",
+      "route": "vendor_followup",
+      "codes": [
+        "DOC_UNREADABLE"
+      ]
+    }
+  },
+  {
     "id": "S14",
     "title": "Bank change after approval",
     "expected": {

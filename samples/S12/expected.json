@@ -1,0 +1,13 @@
+{
+  "id": "S12",
+  "title": "Duplicate of an existing vendor",
+  "notes": "Same GSTIN as active vendor Northwind Logistics.",
+  "expected": {
+    "status": "rejected",
+    "route": "none",
+    "codes": [
+      "DUPLICATE_VENDOR"
+    ]
+  },
+  "settings": {}
+}
