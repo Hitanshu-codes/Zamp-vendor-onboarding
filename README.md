@@ -4,8 +4,9 @@ A vendor submits a form and three documents (tax registration certificate, bank 
 
 > **AI reads the documents, plain rules make the decision, people handle the risky cases.**
 
+- **Step-by-step setup, publish and deploy:** [`SETUP.md`](SETUP.md)
 - **How it works (plain English):** [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-- **5-minute demo script:** [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md)
+- **5-minute live demo script:** [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md) · **video script:** [`docs/VIDEO_SCRIPT.md`](docs/VIDEO_SCRIPT.md)
 - **Every design decision, one line each:** [`docs/DECISIONS.md`](docs/DECISIONS.md)
 - **The original brief and the owner's amendments:** [`docs/PROMPT.md`](docs/PROMPT.md)
 
