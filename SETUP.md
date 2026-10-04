@@ -218,7 +218,7 @@ The repository includes `render.yaml` (a Render Blueprint) and a `Dockerfile`, s
 3. **Settings:**
    - LLM mode **Auto**, LLM enabled **on**.
    - **Evaluator view on**, so the sample list doesn't reveal expected outcomes.
-   - For the video, tax-rule search provider = **Curated official sources only** (keeps the run view clean).
+   - Tax-rule search provider = **Gemini + Google Search** (the default; it falls back to official sources automatically and says so).
 4. Run order matters: **S1 before S7a** (S7a fixes S1's vendor) and **S4a before S4b/S4c** (S4a learns the US rule).
 5. Scripts:
    - [`docs/VIDEO_SCRIPT.md`](docs/VIDEO_SCRIPT.md): five-minute recorded video
