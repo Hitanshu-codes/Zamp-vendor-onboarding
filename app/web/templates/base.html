@@ -10,18 +10,6 @@
   {% block head %}{% endblock %}
 </head>
 <body>
-  <div class="banner" role="note">
-    <strong>Demo mode</strong>
-    <span>All data is fictional</span>
-    <span class="sep">|</span>
-    <span>LLM:
-      {% if llm_enabled %}<strong>on</strong> ({{ llm_mode }}){% else %}<span class="flag-off">off (kill switch)</span>{% endif %}
-    </span>
-    <span class="sep">|</span>
-    <span>Email: {{ email_provider }}</span>
-    <span class="sep">|</span>
-    <span>Date: {{ sim_today }}{% if clock_offset %} (simulated +{{ clock_offset }}d){% endif %}</span>
-  </div>
   <div class="shell">
     <aside class="sidebar">
       <div class="brand"><span class="brand-mark" aria-hidden="true">VO</span><span>Vendor Onboarding</span></div>

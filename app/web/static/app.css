@@ -45,15 +45,7 @@ code, .mono { font-family: var(--mono); font-size: 12.5px; }
 .small { font-size: 12.5px; }
 
 /* --- shell ---------------------------------------------------------------- */
-.banner {
-  background: #1f2a37; color: #dbe3ec; font-size: 12.5px;
-  padding: 6px 20px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
-}
-.banner strong { color: #fff; font-weight: 600; }
-.banner .sep { opacity: .35; }
-.banner .flag-off { color: #ffb4a8; font-weight: 600; }
-
-.shell { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 32px); }
+.shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
 .sidebar {
   background: var(--surface); border-right: 1px solid var(--border);
   padding: 20px 12px; display: flex; flex-direction: column; gap: 4px;
